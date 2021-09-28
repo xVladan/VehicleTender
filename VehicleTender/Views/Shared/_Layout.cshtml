@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/bundles/dx.common")
+    @Styles.Render("~/bundles/dx.light")
+
+    <link href="~/Content/navigation.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous" />
+</head>
+<body>
+    @{ if (User.Identity.IsAuthenticated)
+        {
+            <nav class="navbar navbar-light bg-dark">
+                <div class="container-fluid">
+                    <h1>
+                        @Html.ActionLink("Vehicle Tender", "Index", "Home", routeValues: null, htmlAttributes: new { @class = "navbar-brand text-secondary" })
+                    </h1>
+                    <div class="user-nav">
+                        @Html.Partial("_LoginPartial")
+                    </div>
+                </div>
+            </nav>
+            <div class="content-container">
+                <div class="sidenav bg-dark">
+                    <p class="navlink">
+                        @Html.ActionLink("Home", "Index", "Home")
+                    </p>
+                    @{
+                        if (HttpContext.Current.User.IsInRole("admin"))
+                        {
+                            <div class="accordion" id="navLinksAccordion">
+                                <div class="accordion-item bg-dark border-0 navlink">
+                                    <p class="accordion-header" id="userManagement">
+                                        <a class="accordion-button bg-dark collapsed" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            User Management
+                                        </a>
+                                    </p>
+                                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="userManagement" data-bs-parent="#navLinksAccordion">
+                                        <div class="accordion-body">
+                                            @Html.ActionLink("Users", "Index", "User")
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item bg-dark border-0 navlink">
+                                    <p class="accordion-header" id="stockManagement">
+                                        <a class="accordion-button bg-dark collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                            Stock Management
+                                        </a>
+                                    </p>
+                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="stockManagement" data-bs-parent="#navLinksAccordion">
+                                        <div class="accordion-body">
+                                            @Html.ActionLink("Manufacturers", "Index", "Stock")
+                                            @Html.ActionLink("Car Models", "CarModels", "Stock")
+                                            @Html.ActionLink("Stocks", "Stocks", "Stock")
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item bg-dark border-0 navlink">
+                                    <p class="accordion-header" id="tenderManagement">
+                                        <a class="accordion-button bg-dark collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                            Tender Management
+                                        </a>
+                                    </p>
+                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="tenderManagement" data-bs-parent="#navLinksAccordion">
+                                        <div class="accordion-body">
+                                            @Html.ActionLink("Tender", "Tenders", "Tender")
+                                            @Html.ActionLink("Status", "Index", "TenderStatus")
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="navlink">
+                                    @Html.ActionLink("Location", "Index", "Location")
+                                </p>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="container body-content">@RenderBody()</div>
+            </div>
+        }
+        else
+        {
+            <div class="container body-content">
+                @RenderBody()
+                <hr />
+                <footer>
+                    <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+                </footer>
+            </div>
+        }
+    }
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/dx.all")
+    @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/bundles/jszip.min")
+    @RenderSection("scripts", required: false)
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
+</body>
+</html>

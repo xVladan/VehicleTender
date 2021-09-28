@@ -1,0 +1,37 @@
+﻿.sidenav {
+    min-height: 92.3vh;
+    width: 15rem;
+    top: 0;
+    left: 0;
+    padding-top: 10px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.content-container {
+    display: flex;
+}
+
+    .content-container .body-content {
+        margin-top: 5rem;
+    }
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.navlink {
+    cursor: pointer;
+}
+
+    .navlink a:focus,
+    .navlink a:active {
+        color: #0c63e4;
+    }

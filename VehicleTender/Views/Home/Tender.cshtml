@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Tender";
+}
+
+@if (this.User.IsInRole("admin"))
+{
+    <div id="tenderInfoAdmin"> </div>
+}
+else
+{
+    <div id="tenderInfo"></div>
+}
+
+@section Scripts{
+    <script src="~/Scripts/tenderData.js"></script>
+}
