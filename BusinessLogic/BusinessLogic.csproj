@@ -78,9 +78,15 @@
   <ItemGroup>
     <Compile Include="DataTransferObjects\GenericDropdown.cs" />
     <Compile Include="DataTransferObjects\HomeTableDTO.cs" />
+    <Compile Include="DataTransferObjects\MobileDTO\CarModelMobileDTO.cs" />
+    <Compile Include="DataTransferObjects\MobileDTO\RegisterMobileUserDTO.cs" />
+    <Compile Include="DataTransferObjects\MobileDTO\StockInfoMobileDTO.cs" />
+    <Compile Include="DataTransferObjects\MobileDTO\TenderMobileDTO.cs" />
+    <Compile Include="DataTransferObjects\MobileDTO\UserMobileDTO.cs" />
     <Compile Include="DataTransferObjects\StockDTO.cs" />
     <Compile Include="DataTransferObjects\TenderBids.cs" />
     <Compile Include="DataTransferObjects\TenderCarsDTO.cs" />
+    <Compile Include="DataTransferObjects\TenderDTO.cs" />
     <Compile Include="DataTransferObjects\TenderViewModel.cs" />
     <Compile Include="MainBLL.cs" />
     <Compile Include="MobileLogic.cs" />

@@ -10,6 +10,7 @@ namespace DataAccessLayer_DAL
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
+        public int LocationId { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
@@ -40,6 +41,7 @@ namespace DataAccessLayer_DAL
             builder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
             builder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             builder.Conventions.Remove<PluralizingTableNameConvention>();
+            builder.Entity<TenderStatus>().HasIndex(e => e.Type).IsUnique();
         }
 
         public static ApplicationDbContext Create()

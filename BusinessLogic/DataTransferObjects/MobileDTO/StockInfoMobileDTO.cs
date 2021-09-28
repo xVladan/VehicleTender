@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 namespace BusinessLogic.DataTransferObjects.MobileDTO
 {
@@ -12,6 +12,6 @@ namespace BusinessLogic.DataTransferObjects.MobileDTO
         public int LocationId { get; set; }
         public string RegNo { get; set; }
         public bool IsSold { get; set; }
-        public DataType? SaledDate { get; set; }
+        public DateTime? SaledDate { get; set; }
     }
 }
