@@ -19,6 +19,7 @@ namespace DataAccessLayer_DAL
         [Display(Name = "Location")]
         public int LocationId { get; set; }
         public string RegNo { get; set; }
+        public int Year { get; set; } 
         public bool IsSold { get; set; }
         public DateTime? SaledDate { get; set; }
 

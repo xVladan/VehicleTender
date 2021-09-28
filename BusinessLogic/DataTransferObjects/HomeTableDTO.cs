@@ -8,6 +8,7 @@ namespace BusinessLogic.DataTransferObjects
 {
     public class HomeTableDTO
     {
+        public int Id { get; set; }
         public string TenderNo { get; set; }
         public string Dealer { get; set; }
         public string DealerName { get; set; }
