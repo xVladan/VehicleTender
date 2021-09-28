@@ -1,16 +1,37 @@
 ﻿@{
     ViewBag.Title = "Tender";
-}
 
-@if (this.User.IsInRole("admin"))
+}
+@section Scripts{
+    <script src="~/Scripts/tenderData.js"></script>
+}
+@if (this.User.IsInRole("admins"))
 {
     <div id="tenderInfoAdmin"> </div>
 }
 else
 {
-    <div id="tenderInfo"></div>
-}
-
-@section Scripts{
-    <script src="~/Scripts/tenderData.js"></script>
+    <div id="tenderInfo">
+        <div id="info" class="py-2">
+            <div class="container border">
+                <div class="row">
+                    <div class="col-sm-2 font-weight-bold"><b> Tender Number: </b></div>
+                    <div id="tenderNo" class="col-xs-12 col-sm-4 mb-2"></div>
+                    <div class="col-sm font-weight-bold col-sm-2 "><b> Tender Open Date: </b></div>
+                    <div id="openDate" class="col-sm col-sm-4 mb-2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm font-weight-bold col-sm-2"><b> Seller: </b></div>
+                    <div id="sellerName" class="col-sm-4 mb-2"></div>
+                    <div class="col-sm font-weight-bold col-sm-2"><b> Tender Close Date:</b> </div>
+                    <div id="closeDate" class="col-sm-4 mb-2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm col-sm-2"><b> Tender Contact: </b></div>
+                    <div id="tenderContact" class=" col-sm-4"></div>
+                </div>
+            </div>
+        </div>
+        <div id="tenderCars"></div>
+    </div>
 }

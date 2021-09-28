@@ -8,7 +8,7 @@ function loadData() {
         key: "Id",
         load: () => {
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "/home/GetTenders",
                 contentType: "application/json",
                 success: (data) => {
@@ -34,11 +34,4 @@ function loadData() {
             },
             "Dealer", "DealerName", "OpenDate", "CloseDate"],
     }).dxDataGrid("instance");
-}
-function LoadAdminTenderData() {
-    console.log("a");
-}
-
-function LoadTenderData() {
-    console.log("a");
 }
