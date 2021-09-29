@@ -1,12 +1,11 @@
 ﻿using BusinessLogic;
 using DataAccessLayer_DAL;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using VehicleTender.API.Helpers;
 
 namespace VehicleTender.API.Controllers
 {
@@ -24,12 +23,21 @@ namespace VehicleTender.API.Controllers
             try
             {
                 var locations = mainBLL.LocationEntries();
+                if (locations == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
                 return Ok(locations);
             }
-            catch (Exception)
+            catch (Exception error)
             {
-
-                throw;
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
             }
         }
 
@@ -40,12 +48,21 @@ namespace VehicleTender.API.Controllers
             try
             {
                 var data = mobileLogic.SaveLocationInDB(locationData);
+                if (data == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
                 return Ok(data);
             }
-            catch (Exception)
+            catch (Exception error)
             {
-
-                throw;
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
             }
         }
     }

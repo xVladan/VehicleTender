@@ -45,10 +45,9 @@ namespace BusinessLogic
                     return users;
                 }
             }
-            catch (Exception)
+            catch (Exception error)
             {
-
-                throw;
+                throw error;
             }
         }
 
@@ -78,10 +77,9 @@ namespace BusinessLogic
                     return userByEmail;
                 }
             }
-            catch (Exception)
+            catch (Exception error)
             {
-
-                throw;
+                throw error;
             }
         }
 
@@ -101,10 +99,10 @@ namespace BusinessLogic
                     return roles;
                 }
             }
-            catch (Exception)
+            catch (Exception error)
             {
 
-                throw;
+                throw error;
             }
         }
 
@@ -121,10 +119,9 @@ namespace BusinessLogic
                     return manufacturer;
                 }
             }
-            catch (Exception)
+            catch (Exception error)
             {
-
-                throw;
+                throw error;
             }
         }
 
@@ -148,10 +145,10 @@ namespace BusinessLogic
                     return carModels;
                 }
             }
-            catch (Exception)
+            catch (Exception error)
             {
 
-                throw;
+                throw error;
             }
         }
 
@@ -166,10 +163,10 @@ namespace BusinessLogic
                     return savedCar;
                 }
             }
-            catch (Exception)
+            catch (Exception error)
             {
 
-                throw;
+                throw error;
             }
         }
 
@@ -199,10 +196,10 @@ namespace BusinessLogic
                     return stocks;
                 }
             }
-            catch (Exception)
+            catch (Exception error)
             {
 
-                throw;
+                throw error;
             }
         }
 
@@ -217,10 +214,10 @@ namespace BusinessLogic
                     return stock;
                 }
             }
-            catch (Exception)
+            catch (Exception error)
             {
 
-                throw;
+                throw error;
             }
         }
 
@@ -237,10 +234,10 @@ namespace BusinessLogic
                     return savedLocation;
                 }
             }
-            catch (Exception)
+            catch (Exception error)
             {
 
-                throw;
+                throw error;
             }
         }
 
@@ -267,10 +264,10 @@ namespace BusinessLogic
                     return tenders;
                 }
             }
-            catch (Exception)
+            catch (Exception error)
             {
 
-                throw;
+                throw error;
             }
         }
 
@@ -285,10 +282,10 @@ namespace BusinessLogic
                     return tender;
                 }
             }
-            catch (Exception)
+            catch (Exception error)
             {
 
-                throw;
+                throw error;
             }
         }
 
@@ -302,10 +299,10 @@ namespace BusinessLogic
                     return tS;
                 }
             }
-            catch (Exception)
+            catch (Exception error)
             {
 
-                throw;
+                throw error;
             }
         }
 
@@ -320,10 +317,80 @@ namespace BusinessLogic
                     return savedTenderStatus;
                 }
             }
-            catch (Exception)
+            catch (Exception error)
             {
 
-                throw;
+                throw error;
+            }
+        }
+
+        public List<TenderStock> AllTenderStocks(string tenderIdString)
+        {
+            try
+            {
+                using(db = new ApplicationDbContext())
+                {
+                    int tenderId = Int32.Parse(tenderIdString);
+                    var tenderStocks = db.TenderStock.Where(tStock => tStock.isDeleted == false && tStock.TenderId == tenderId).ToList();
+                    return tenderStocks;
+                }
+            }
+            catch (Exception error)
+            {
+
+                throw error;
+            }
+        }
+
+        public TenderStock AddTenderStock(TenderStock data)
+        {
+            try
+            {
+                using(db = new ApplicationDbContext())
+                {
+                    var savedData = db.TenderStock.Add(data);
+                    return savedData;
+                }
+            }
+            catch (Exception error)
+            {
+
+                throw error;
+            }
+        }
+
+        public List<TenderUser> AllTenderUsers(string tenderIdString)
+        {
+            try
+            {
+                using(db = new ApplicationDbContext())
+                {
+                    int tenderId = Int32.Parse(tenderIdString);
+                    var tenderUsers = db.TenderUser.Where(tUser => tUser.TenderId == tenderId).ToList();
+                    return tenderUsers;
+                }
+            }
+            catch (Exception error)
+            {
+
+                throw error;
+            }
+        }
+
+        public TenderUser AddTenderUser(TenderUser tenderUserData)
+        {
+            try
+            {
+                using(db = new ApplicationDbContext())
+                {
+                    var savedData = db.TenderUser.Add(tenderUserData);
+                    return savedData;
+                }
+            }
+            catch (Exception error)
+            {
+
+                throw error;
             }
         }
 

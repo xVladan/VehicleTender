@@ -2,17 +2,20 @@
 using BusinessLogic.DataTransferObjects.MobileDTO;
 using DataAccessLayer_DAL;
 using Microsoft.AspNet.Identity.Owin;
+using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using VehicleTender.API.Helpers;
 
 namespace VehicleTender.API.Controllers
 {
     [Authorize]
-    [EnableCors(origins: "https://localhost:44341/swagger/docs/v1", headers: "*", methods: "*")]
+    //[EnableCors(origins: "https://localhost:44341/swagger/docs/v1", headers: "*", methods: "*")]
     public class UserController : ApiController
     {
         private MobileLogic mobileLogic = new MobileLogic();
@@ -43,16 +46,50 @@ namespace VehicleTender.API.Controllers
         [Route("api/users")]
         public IHttpActionResult GetAllUsers()
         {
-            var users = mobileLogic.GetUsersList();
-            return Ok(users);
+            try
+            {
+                var users = mobileLogic.GetUsersList();
+                if (users == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
+                return Ok(users);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
         }
 
         [HttpGet]
         [Route("api/user")]
         public IHttpActionResult GetUserByEmail(string email)
         {
-            var userByEmail = mobileLogic.GetUserByEmail(email);
-            return Ok(userByEmail);
+            try
+            {
+                var userByEmail = mobileLogic.GetUserByEmail(email);
+                if (userByEmail == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
+                return Ok(userByEmail);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
         }
 
         [Authorize(Roles = "admin")]
@@ -60,36 +97,57 @@ namespace VehicleTender.API.Controllers
         [Route("api/user")]
         public async Task<IHttpActionResult> SaveUser(RegisterMobileUserDTO model)
         {
-            MainBLL mainBLL = new MainBLL();
-            var role = mainBLL.GetRoles().FirstOrDefault(r => r.Id == model.RoleId);
-            string jsonMessage;
-            var user = new ApplicationUser
+            if (ModelState.IsValid)
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                DealerName = model.DealerName,
-                Email = model.Email,
-                UserName = model.Email,
-                isActive = model.isActive,
-            };
+                MainBLL mainBLL = new MainBLL();
+                var role = mainBLL.GetRoles().FirstOrDefault(r => r.Id == model.RoleId);
+                string jsonMessage;
+                var user = new ApplicationUser
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    DealerName = model.DealerName,
+                    Email = model.Email,
+                    UserName = model.Email,
+                    isActive = model.isActive,
+                };
 
-            var result = await UserManager.CreateAsync(user, model.Password);
+                var result = await UserManager.CreateAsync(user, model.Password);
 
-            if (result.Succeeded)
-            {
-                await UserManager.AddToRoleAsync(user.Id, role.Name);
-                return Ok(user);
+                if (result.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(user.Id, role.Name);
+                    return Ok(user);
+                }
+                jsonMessage = result.Errors.FirstOrDefault(x => x.Contains("Email"));
+                return BadRequest(jsonMessage);
             }
-            jsonMessage = result.Errors.FirstOrDefault(x => x.Contains("Email"));
-            return Json(jsonMessage);
+            return BadRequest("Please enter password!");
         }
 
         [HttpGet]
         [Route("api/roles")]
         public IHttpActionResult GetAllRoles()
         {
-            var roles = mobileLogic.AllRoles();
-            return Ok(roles);
+            try
+            {
+                var roles = mobileLogic.AllRoles();
+                if (roles == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
+                return Ok(roles);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
         }
     }
 }

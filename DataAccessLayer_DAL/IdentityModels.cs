@@ -42,6 +42,11 @@ namespace DataAccessLayer_DAL
             builder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             builder.Conventions.Remove<PluralizingTableNameConvention>();
             builder.Entity<TenderStatus>().HasIndex(e => e.Type).IsUnique();
+            builder.Entity<Manufacturer>().HasIndex(e => e.ManufacturerName).IsUnique();
+            builder.Entity<Tender>().HasIndex(t => t.TenderNo).IsUnique();
+            builder.Entity<StockInfo>().HasIndex(s => s.RegNo).IsUnique();
+            builder.Entity<Location>().HasIndex(l => l.City).IsUnique();
+            builder.Entity<Location>().HasIndex(l => l.ZipCode).IsUnique();
         }
 
         public static ApplicationDbContext Create()

@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using VehicleTender.API.Helpers;
 
 namespace VehicleTender.API.Controllers
 {
@@ -24,8 +25,25 @@ namespace VehicleTender.API.Controllers
         [Route("api/tenders")]
         public IHttpActionResult AllTenders()
         {
-            var tenderList = mobileLogic.GetAllTenders();
-            return Ok(tenderList);
+            try
+            {
+                var tenderList = mobileLogic.GetAllTenders();
+                if (tenderList == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
+                return Ok(tenderList);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
 
         }
 
@@ -33,9 +51,127 @@ namespace VehicleTender.API.Controllers
         [Route("api/tender")]
         public IHttpActionResult AddTender(Tender tenderData)
         {
-            var savedTender = mobileLogic.SaveTenderInDb(tenderData);
-            return Ok(savedTender);
+            try
+            {
+                var savedTender = mobileLogic.SaveTenderInDb(tenderData);
+                if (savedTender == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
+                return Ok(savedTender);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
         }
+
+        [HttpGet]
+        [Route("api/tenderstocks")]
+        public IHttpActionResult GetTenderStocks(string tenderId)
+        {
+            try
+            {
+                var tenderStocks = mobileLogic.AllTenderStocks(tenderId);
+                if (tenderStocks == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
+                return Ok(tenderStocks);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
+        }
+
+        [HttpPost]
+        [Route("api/tenderstock")]
+        public IHttpActionResult AddTenderStock(TenderStock tStockData)
+        {
+            try
+            {
+                var savedData = mobileLogic.AddTenderStock(tStockData);
+                if (savedData == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
+                return Ok(savedData);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
+        }
+
+        [HttpGet]
+        [Route("api/tenderusers")]
+        public IHttpActionResult GetTenderUsers(string tenderId)
+        {
+            try
+            {
+                var tenderUsers = mobileLogic.AllTenderUsers(tenderId);
+                if (tenderUsers == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
+                return Ok(tenderUsers);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
+        }
+
+        [HttpPost]
+        [Route("api/tenderuser")]
+        public IHttpActionResult AddTenderUser(TenderUser tUserData)
+        {
+            try
+            {
+                var response = mobileLogic.AddTenderUser(tUserData);
+                if (response == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
+                return Ok(response);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
+        }
+
 
         // Tender Status Actions
 
@@ -43,17 +179,50 @@ namespace VehicleTender.API.Controllers
         [Route("api/status")]
         public IHttpActionResult AllTenderStatuses()
         {
-            var statuses = mobileLogic.GetTenderStatuses();
-
-            return Ok(statuses);
+            try
+            {
+                var statuses = mobileLogic.GetTenderStatuses();
+                if (statuses == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
+                return Ok(statuses);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
         }
 
         [HttpPost]
         [Route("api/status")]
         public IHttpActionResult AddTenderStatus(TenderStatus tenderStatus)
         {
-            var savedTenderStatus = mobileLogic.AddTenderStatus(tenderStatus);
-            return Ok(savedTenderStatus);
+            try
+            {
+                var savedTenderStatus = mobileLogic.AddTenderStatus(tenderStatus);
+                if (savedTenderStatus == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
+                return Ok(savedTenderStatus);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
         }
     }
 }
