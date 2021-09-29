@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.DataTransferObjects.MobileDTO;
 using DataAccessLayer_DAL;
+using DataAccessLayer_DAL.BusinessObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,6 +76,29 @@ namespace BusinessLogic
                     var roleName = db.Roles.FirstOrDefault(role => role.Id == userByEmail.RoleId).Name;
                     userByEmail.RoleName = roleName;
                     return userByEmail;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public List<AspNetRolesMeta> AllRoles()
+        {
+            try
+            {
+                using(db = new ApplicationDbContext())
+                {
+                    var roles = db.Roles
+                        .Select(role => new AspNetRolesMeta
+                        {
+                            Id = role.Id,
+                            Name = role.Name
+                        })
+                        .ToList();
+                    return roles;
                 }
             }
             catch (Exception)

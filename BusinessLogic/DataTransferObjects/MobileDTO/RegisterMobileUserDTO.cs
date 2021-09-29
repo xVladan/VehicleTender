@@ -37,5 +37,6 @@ namespace BusinessLogic.DataTransferObjects.MobileDTO
         public string RoleId { get; set; }
 
         public string DealerName { get; set; }
+        public int LocationId { get; set; }
     }
 }

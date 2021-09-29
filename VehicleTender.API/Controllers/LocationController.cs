@@ -6,10 +6,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace VehicleTender.API.Controllers
 {
     [Authorize]
+    [EnableCors(origins: "https://localhost:44341/swagger/docs/v1", headers: "*", methods: "*")]
     public class LocationController : ApiController
     {
         private MobileLogic mobileLogic = new MobileLogic();

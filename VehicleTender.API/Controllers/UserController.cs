@@ -7,10 +7,12 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace VehicleTender.API.Controllers
 {
     [Authorize]
+    [EnableCors(origins: "https://localhost:44341/swagger/docs/v1", headers: "*", methods: "*")]
     public class UserController : ApiController
     {
         private MobileLogic mobileLogic = new MobileLogic();
@@ -80,6 +82,14 @@ namespace VehicleTender.API.Controllers
             }
             jsonMessage = result.Errors.FirstOrDefault(x => x.Contains("Email"));
             return Json(jsonMessage);
+        }
+
+        [HttpGet]
+        [Route("api/roles")]
+        public IHttpActionResult GetAllRoles()
+        {
+            var roles = mobileLogic.AllRoles();
+            return Ok(roles);
         }
     }
 }

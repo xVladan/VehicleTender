@@ -6,10 +6,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace VehicleTender.API.Controllers
 {
     [Authorize(Roles = "admin")]
+    [EnableCors(origins: "https://localhost:44341/swagger/docs/v1", headers: "*", methods: "*")]
     public class StockController : ApiController
     {
         private MainBLL mainBLL = new MainBLL();
