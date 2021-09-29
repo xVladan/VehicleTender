@@ -3,7 +3,7 @@
 });
 
 function loadData() {
-    if ($("#tenderInfo").length>0) {
+    if ($("#tenderInfo").length > 0) {
         LoadTender();
     } else {
         LoadAdminTenderData();
@@ -13,10 +13,11 @@ function LoadAdminTenderData() {
 }
 
 async function LoadTender() {
+    console.log("a");
     var tender = await LoadTenderData();
     await LoadTenderCars(tender.Id);
     await LoadTenderBids(tender.Id);
-    
+
 }
 async function LoadTenderData() {
     var url = window.location.pathname;
@@ -68,7 +69,7 @@ async function LoadTenderCars(id) {
         columnAutoWidth: true,
         columns: ["Id", "RegNo", "Year", "Make", "CarLine", "Model", "Mileage", "Comments"],
     }).dxDataGrid("columnOption", "Id", "visible", false);
-    
+
 }
 async function LoadTenderBids() {
     $.ajax({

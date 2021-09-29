@@ -322,6 +322,7 @@ namespace BusinessLogic
                             CarModel = x.Car.ModelName,
                             LocationId = x.LocationId,
                             ModelLineId = x.ModelLineId,
+                            Year = x.Year,
                         })
                         .ToList();
 
@@ -364,6 +365,7 @@ namespace BusinessLogic
                     modelById.LocationId = stockModel.LocationId;
                     modelById.RegNo = stockModel.RegNo;
                     modelById.IsSold = stockModel.IsSold;
+                    modelById.Year = stockModel.Year;
                     db.SaveChanges();
                 }
             }
@@ -405,6 +407,7 @@ namespace BusinessLogic
                         Price = p.Price,
                         RegNo = p.RegNo,
                         CarModel = p.Car.ModelName,
+                        Year = p.Year,
                         FullCarName = p.Car.Manufacturer.ManufacturerName + " " + p.Car.ModelName
                     }).OrderBy(x => x.Id).ToList();
                     return listFormDb;

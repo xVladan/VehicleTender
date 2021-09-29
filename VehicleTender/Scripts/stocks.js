@@ -46,6 +46,7 @@ function insertDataIntoTable() {
                 LocationId: values.LocationId ? values.LocationId : editedStock.LocationId,
                 RegNo: values.RegNo ? values.RegNo : editedStock.RegNo,
                 IsSold: values.IsSold ? values.IsSold : editedStock.IsSold,
+                Year: values.Year ? values.Year : editedStock.Year,
             }
             $.ajax({
                 url: "/Stock/EditStock",
@@ -145,6 +146,10 @@ function insertDataIntoTable() {
                                 colSpan: 2,
                             },
                             {
+                                dataField: "Year",
+                                colSpan: 2,
+                            },
+                            {
                                 dataField: "Mileage",
                                 colSpan: 2,
                             },
@@ -200,6 +205,11 @@ function insertDataIntoTable() {
                 }
             },
             {
+                dataField: "Year",
+                dataType: "text",
+                caption: "Year",
+            },
+            {
                 dataField: "Mileage",
                 width: "10%",
                 dataType: "text",
@@ -226,11 +236,11 @@ function insertDataIntoTable() {
                 dataField: "RegNo",
                 caption: "Registration Number",
             },
-            {
-                dataField: "SaledDate",
-                caption: "Saled Date",
-                dataType: "DateTime",
-            },
+            //{
+            //    dataField: "SaledDate",
+            //    caption: "Saled Date",
+            //    dataType: "DateTime",
+            /*},*/
             //{
             //    dataField: "IsSold",
             //    caption: "Sold",

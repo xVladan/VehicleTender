@@ -9,7 +9,7 @@ function loadData() {
         load: () => {
             $.ajax({
                 type: "POST",
-                url: "/home/GetTenders",
+                url: "/Home/GetTenders",
                 contentType: "application/json",
                 success: (data) => {
                     userPromis.resolve(data);
