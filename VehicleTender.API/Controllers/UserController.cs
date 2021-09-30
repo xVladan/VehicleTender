@@ -51,12 +51,7 @@ namespace VehicleTender.API.Controllers
                 var users = mobileLogic.GetUsersList();
                 if (users == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(users);
             }
@@ -76,12 +71,7 @@ namespace VehicleTender.API.Controllers
                 var userByEmail = mobileLogic.GetUserByEmail(email);
                 if (userByEmail == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(userByEmail);
             }
@@ -135,12 +125,7 @@ namespace VehicleTender.API.Controllers
                 var changedUser = mobileLogic.EditUser(userData);
                 if (changedUser == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 UserManager.AddToRoleAsync(changedUser.Id, changedUser.RoleName);
                 return Ok(changedUser);
@@ -161,12 +146,7 @@ namespace VehicleTender.API.Controllers
                 var roles = mobileLogic.AllRoles();
                 if (roles == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(roles);
             }

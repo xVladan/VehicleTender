@@ -29,12 +29,7 @@ namespace VehicleTender.API.Controllers
                 var manufacturerList = mainBLL.GetManufacturers();
                 if (manufacturerList == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(manufacturerList);
             }
@@ -54,12 +49,7 @@ namespace VehicleTender.API.Controllers
                 var savedManufacturer = mobileLogic.SaveManufacturerInDb(manufacturerData);
                 if (savedManufacturer == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(savedManufacturer);
             }
@@ -81,12 +71,7 @@ namespace VehicleTender.API.Controllers
                 var carModels = mobileLogic.GetAllCars();
                 if (carModels == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(carModels);
             }
@@ -106,12 +91,7 @@ namespace VehicleTender.API.Controllers
                 var savedCar = mobileLogic.AddCar(carData);
                 if (savedCar == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(savedCar);
             }
@@ -133,12 +113,7 @@ namespace VehicleTender.API.Controllers
                 var stocks = mobileLogic.GetAllStocks();
                 if (stocks == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(stocks);
             }
@@ -158,12 +133,7 @@ namespace VehicleTender.API.Controllers
                 var savedStock = mobileLogic.SaveStockInDb(stockData);
                 if (savedStock == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(savedStock);
             }

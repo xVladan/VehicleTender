@@ -29,12 +29,7 @@ namespace VehicleTender.API.Controllers
                 var tenderList = mobileLogic.GetAllTenders();
                 if (tenderList == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(tenderList);
             }
@@ -55,12 +50,7 @@ namespace VehicleTender.API.Controllers
                 var savedTender = mobileLogic.SaveTenderInDb(tenderData);
                 if (savedTender == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(savedTender);
             }
@@ -80,12 +70,7 @@ namespace VehicleTender.API.Controllers
                 var tenderStocks = mobileLogic.AllTenderStocks();
                 if (tenderStocks == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(tenderStocks);
             }
@@ -105,12 +90,7 @@ namespace VehicleTender.API.Controllers
                 var savedData = mobileLogic.AddTenderStock(tStockData);
                 if (savedData == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(savedData);
             }
@@ -130,12 +110,7 @@ namespace VehicleTender.API.Controllers
                 var tenderUsers = mobileLogic.AllTenderUsers();
                 if (tenderUsers == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(tenderUsers);
             }
@@ -155,12 +130,7 @@ namespace VehicleTender.API.Controllers
                 var response = mobileLogic.AddTenderUser(tUserData);
                 if (response == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(response);
             }
@@ -183,12 +153,7 @@ namespace VehicleTender.API.Controllers
                 var statuses = mobileLogic.GetTenderStatuses();
                 if (statuses == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(statuses);
             }
@@ -208,12 +173,7 @@ namespace VehicleTender.API.Controllers
                 var savedTenderStatus = mobileLogic.AddTenderStatus(tenderStatus);
                 if (savedTenderStatus == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(savedTenderStatus);
             }
@@ -235,12 +195,7 @@ namespace VehicleTender.API.Controllers
                 var bids = mobileLogic.AllBids();
                 if (bids == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(bids);
             }
@@ -260,12 +215,7 @@ namespace VehicleTender.API.Controllers
                 var savedBid = mobileLogic.SaveBid(bidData);
                 if (savedBid == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(savedBid);
             }

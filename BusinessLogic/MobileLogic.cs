@@ -71,10 +71,13 @@ namespace BusinessLogic
                             RoleId = user.Roles.FirstOrDefault(role => role.UserId == user.Id).RoleId
                         })
                         .FirstOrDefault(user => user.Email == email);
-
-                    var roleName = db.Roles.FirstOrDefault(role => role.Id == userByEmail.RoleId).Name;
-                    userByEmail.RoleName = roleName;
-                    return userByEmail;
+                    if(userByEmail != null)
+                    {
+                        var roleName = db.Roles.FirstOrDefault(role => role.Id == userByEmail.RoleId).Name;
+                        userByEmail.RoleName = roleName;
+                        return userByEmail;
+                    }
+                    return null;
                 }
             }
             catch (Exception error)
@@ -91,17 +94,22 @@ namespace BusinessLogic
                 {
                     var userRole = db.Roles.FirstOrDefault(role => role.Id == editData.RoleId);
                     var userById = db.Users.FirstOrDefault(user => user.Id == editData.Id);
-                    userById.FirstName = editData.FirstName;
-                    userById.LastName = editData.LastName;
-                    userById.UserName = editData.Email;
-                    userById.DealerName = editData.CompanyName;
-                    userById.Email = editData.Email;
-                    userById.isActive = editData.isActive;
-                    userById.LocationId = editData.LocationId;
-                    userById.PhoneNumber = editData.PhoneNumber;
-                    editData.RoleName = userRole.Name;
-                    db.SaveChanges();
-                    return editData;
+                    
+                    if(userById != null)
+                    {
+                        userById.FirstName = editData.FirstName;
+                        userById.LastName = editData.LastName;
+                        userById.UserName = editData.Email;
+                        userById.DealerName = editData.CompanyName;
+                        userById.Email = editData.Email;
+                        userById.isActive = editData.isActive;
+                        userById.LocationId = editData.LocationId;
+                        userById.PhoneNumber = editData.PhoneNumber;
+                        editData.RoleName = userRole.Name;
+                        db.SaveChanges();
+                        return editData;
+                    }
+                    return null;
                 }
             }
             catch (Exception error)

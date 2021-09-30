@@ -25,12 +25,7 @@ namespace VehicleTender.API.Controllers
                 var locations = mainBLL.LocationEntries();
                 if (locations == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(locations);
             }
@@ -50,12 +45,7 @@ namespace VehicleTender.API.Controllers
                 var data = mobileLogic.SaveLocationInDB(locationData);
                 if (data == null)
                 {
-                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Data not found")),
-                        ReasonPhrase = "Data not found"
-                    };
-                    throw new HttpResponseException(errorMsg);
+                    return NotFound();
                 }
                 return Ok(data);
             }
