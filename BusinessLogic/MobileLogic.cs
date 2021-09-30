@@ -83,6 +83,33 @@ namespace BusinessLogic
             }
         }
 
+        public UserMobileDTO EditUser(UserMobileDTO editData)
+        {
+            try
+            {
+                using(db = new ApplicationDbContext())
+                {
+                    var userRole = db.Roles.FirstOrDefault(role => role.Id == editData.RoleId);
+                    var userById = db.Users.FirstOrDefault(user => user.Id == editData.Id);
+                    userById.FirstName = editData.FirstName;
+                    userById.LastName = editData.LastName;
+                    userById.UserName = editData.Email;
+                    userById.DealerName = editData.CompanyName;
+                    userById.Email = editData.Email;
+                    userById.isActive = editData.isActive;
+                    userById.LocationId = editData.LocationId;
+                    userById.PhoneNumber = editData.PhoneNumber;
+                    editData.RoleName = userRole.Name;
+                    db.SaveChanges();
+                    return editData;
+                }
+            }
+            catch (Exception error)
+            {
+                throw error;
+            }
+        }
+
         public List<AspNetRolesMeta> AllRoles()
         {
             try
@@ -324,14 +351,22 @@ namespace BusinessLogic
             }
         }
 
-        public List<TenderStock> AllTenderStocks(string tenderIdString)
+        public List<TenderStockMobileDTO> AllTenderStocks()
         {
             try
             {
                 using(db = new ApplicationDbContext())
                 {
-                    int tenderId = Int32.Parse(tenderIdString);
-                    var tenderStocks = db.TenderStock.Where(tStock => tStock.isDeleted == false && tStock.TenderId == tenderId).ToList();
+                    var tenderStocks = db.TenderStock
+                        .Select(tStock => new TenderStockMobileDTO
+                        {
+                            Id = tStock.Id,
+                            TenderId = tStock.TenderId,
+                            StockId = tStock.StockId,
+                            isDeleted = tStock.isDeleted,
+                            SaleDate = tStock.SaleDate
+                        })
+                        .ToList();
                     return tenderStocks;
                 }
             }
@@ -359,14 +394,20 @@ namespace BusinessLogic
             }
         }
 
-        public List<TenderUser> AllTenderUsers(string tenderIdString)
+        public List<TenderUserMobileDTO> AllTenderUsers()
         {
             try
             {
                 using(db = new ApplicationDbContext())
                 {
-                    int tenderId = Int32.Parse(tenderIdString);
-                    var tenderUsers = db.TenderUser.Where(tUser => tUser.TenderId == tenderId).ToList();
+                    var tenderUsers = db.TenderUser
+                        .Select(tUser => new TenderUserMobileDTO
+                        {
+                            Id = tUser.Id,
+                            TenderId = tUser.TenderId,
+                            UserId = tUser.UserId
+                        })
+                        .ToList();
                     return tenderUsers;
                 }
             }

@@ -125,6 +125,33 @@ namespace VehicleTender.API.Controllers
             return BadRequest("Please enter password!");
         }
 
+        [Authorize(Roles = "admin")]
+        [HttpPut]
+        [Route("api/user")]
+        public IHttpActionResult EditUser(UserMobileDTO userData)
+        {
+            try
+            {
+                var changedUser = mobileLogic.EditUser(userData);
+                if (changedUser == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
+                UserManager.AddToRoleAsync(changedUser.Id, changedUser.RoleName);
+                return Ok(changedUser);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
+        }
+
         [HttpGet]
         [Route("api/roles")]
         public IHttpActionResult GetAllRoles()

@@ -82,6 +82,8 @@
     <Compile Include="DataTransferObjects\MobileDTO\RegisterMobileUserDTO.cs" />
     <Compile Include="DataTransferObjects\MobileDTO\StockInfoMobileDTO.cs" />
     <Compile Include="DataTransferObjects\MobileDTO\TenderMobileDTO.cs" />
+    <Compile Include="DataTransferObjects\MobileDTO\TenderStockMobileDTO.cs" />
+    <Compile Include="DataTransferObjects\MobileDTO\TenderUserMobileDTO.cs" />
     <Compile Include="DataTransferObjects\MobileDTO\UserMobileDTO.cs" />
     <Compile Include="DataTransferObjects\StockDTO.cs" />
     <Compile Include="DataTransferObjects\TenderBids.cs" />

@@ -74,11 +74,11 @@ namespace VehicleTender.API.Controllers
 
         [HttpGet]
         [Route("api/tenderstocks")]
-        public IHttpActionResult GetTenderStocks(string tenderId)
+        public IHttpActionResult GetTenderStocks()
         {
             try
             {
-                var tenderStocks = mobileLogic.AllTenderStocks(tenderId);
+                var tenderStocks = mobileLogic.AllTenderStocks();
                 if (tenderStocks == null)
                 {
                     var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
@@ -124,11 +124,11 @@ namespace VehicleTender.API.Controllers
 
         [HttpGet]
         [Route("api/tenderusers")]
-        public IHttpActionResult GetTenderUsers(string tenderId)
+        public IHttpActionResult GetTenderUsers()
         {
             try
             {
-                var tenderUsers = mobileLogic.AllTenderUsers(tenderId);
+                var tenderUsers = mobileLogic.AllTenderUsers();
                 if (tenderUsers == null)
                 {
                     var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
