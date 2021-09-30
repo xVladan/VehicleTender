@@ -1,4 +1,5 @@
 ﻿using BusinessLogic;
+using BusinessLogic.DataTransferObjects.MobileDTO;
 using DataAccessLayer_DAL;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using VehicleTender.API.Helpers;
 namespace VehicleTender.API.Controllers
 {
     [Authorize]
-    [EnableCors(origins: "https://localhost:44341/swagger/docs/v1", headers: "*", methods: "*")]
+    //[EnableCors(origins: "https://localhost:44341/swagger/docs/v1", headers: "*", methods: "*")]
     public class TenderController : ApiController
     {
         private MainBLL mainBLL = new MainBLL();
@@ -217,6 +218,58 @@ namespace VehicleTender.API.Controllers
                     throw new HttpResponseException(errorMsg);
                 }
                 return Ok(savedTenderStatus);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
+        }
+
+        // Bid actions
+
+        [HttpGet]
+        [Route("api/bids")]
+        public IHttpActionResult AllBids()
+        {
+            try
+            {
+                var bids = mobileLogic.AllBids();
+                if (bids == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
+                return Ok(bids);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
+        }
+
+        [HttpPost]
+        [Route("api/bid")]
+        public IHttpActionResult AddBid(BidMobileDTO bidData)
+        {
+            try
+            {
+                var savedBid = mobileLogic.SaveBid(bidData);
+                if (savedBid == null)
+                {
+                    var errorMsg = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(string.Format("Data not found")),
+                        ReasonPhrase = "Data not found"
+                    };
+                    throw new HttpResponseException(errorMsg);
+                }
+                return Ok(savedBid);
             }
             catch (Exception error)
             {

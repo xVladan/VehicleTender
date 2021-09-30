@@ -384,6 +384,7 @@ namespace BusinessLogic
                 using(db = new ApplicationDbContext())
                 {
                     var savedData = db.TenderStock.Add(data);
+                    db.SaveChanges();
                     return savedData;
                 }
             }
@@ -425,12 +426,63 @@ namespace BusinessLogic
                 using(db = new ApplicationDbContext())
                 {
                     var savedData = db.TenderUser.Add(tenderUserData);
+                    db.SaveChanges();
                     return savedData;
                 }
             }
             catch (Exception error)
             {
 
+                throw error;
+            }
+        }
+
+        public List<BidMobileDTO> AllBids()
+        {
+            try
+            {
+                using(db = new ApplicationDbContext())
+                {
+                    var allBids = db.Bid
+                        .Select(bid => new BidMobileDTO
+                        {
+                            Id = bid.Id,
+                            TenderStockId = bid.TenderStockId,
+                            TenderUserId = bid.TenderUserId,
+                            IsWinningPrice = bid.IsWinningPrice,
+                            Price = bid.Price
+                        })
+                        .ToList();
+                    return allBids;
+                }
+            }
+            catch (Exception error)
+            {
+                throw error;
+            }
+        }
+
+        public BidMobileDTO SaveBid(BidMobileDTO bidData)
+        {
+            try
+            {
+                using(db = new ApplicationDbContext())
+                {
+                    var bid = new Bid
+                    {
+                        TenderStockId = bidData.TenderStockId,
+                        TenderUserId = bidData.TenderUserId,
+                        IsWinningPrice = bidData.IsWinningPrice,
+                        Price = bidData.Price
+                    };
+                    var storedBid = db.Bid.Add(bid);
+                    db.SaveChanges();
+                    bidData.Id = storedBid.Id;
+                    return bidData;
+                }
+            }
+            catch (Exception error)
+            {
                 throw error;
             }
         }

@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="DataTransferObjects\GenericDropdown.cs" />
     <Compile Include="DataTransferObjects\HomeTableDTO.cs" />
+    <Compile Include="DataTransferObjects\MobileDTO\BidMobileDTO.cs" />
     <Compile Include="DataTransferObjects\MobileDTO\CarModelMobileDTO.cs" />
     <Compile Include="DataTransferObjects\MobileDTO\RegisterMobileUserDTO.cs" />
     <Compile Include="DataTransferObjects\MobileDTO\StockInfoMobileDTO.cs" />
