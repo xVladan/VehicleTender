@@ -179,15 +179,22 @@ namespace BusinessLogic
             }
         }
 
-        public CarModel AddCar(CarModel carData)
+        public CarModelMobileDTO AddCar(CarModelMobileDTO carData)
         {
             try
             {
                 using(db = new ApplicationDbContext())
                 {
-                    var savedCar = db.CarModel.Add(carData);
+                    CarModel car = new CarModel
+                    {
+                        ModelName = carData.ModelName,
+                        ModelNo = carData.ModelNo,
+                        ManufacturerId = carData.ManufacturerId
+                    };
+                    var savedCar = db.CarModel.Add(car);
                     db.SaveChanges();
-                    return savedCar;
+                    carData.Id = savedCar.Id;
+                    return carData;
                 }
             }
             catch (Exception error)
@@ -230,15 +237,27 @@ namespace BusinessLogic
             }
         }
 
-        public StockInfo SaveStockInDb(StockInfo stockData)
+        public StockInfoMobileDTO SaveStockInDb(StockInfoMobileDTO stockData)
         {
             try
             {
                 using(db = new ApplicationDbContext())
                 {
-                    var stock = db.StockInfo.Add(stockData);
+                    StockInfo stockInfo = new StockInfo
+                    {
+                        ModelLineId = stockData.ModelLineId,
+                        Mileage = stockData.Mileage,
+                        Price = stockData.Price,
+                        Comments = stockData.Comments,
+                        LocationId = stockData.LocationId,
+                        RegNo = stockData.RegNo,
+                        IsSold = stockData.IsSold,
+                        SaledDate = stockData.SaledDate
+                    };
+                    var stock = db.StockInfo.Add(stockInfo);
                     db.SaveChanges();
-                    return stock;
+                    stockData.Id = stock.Id;
+                    return stockData;
                 }
             }
             catch (Exception error)
@@ -298,15 +317,25 @@ namespace BusinessLogic
             }
         }
 
-        public Tender SaveTenderInDb(Tender tenderData)
+        public TenderMobileDTO SaveTenderInDb(TenderMobileDTO tenderData)
         {
             try
             {
                 using(db = new ApplicationDbContext())
                 {
-                    var tender = db.Tender.Add(tenderData);
+                    Tender tender = new Tender
+                    {
+                        CreatedDate = tenderData.CreatedDate,
+                        UserId = tenderData.UserId,
+                        TenderNo = tenderData.TenderNo,
+                        OpenDate = tenderData.OpenDate,
+                        CloseDate = tenderData.CloseDate,
+                        StatusId = tenderData.StatusId
+                    };
+                    var savedTender = db.Tender.Add(tender);
                     db.SaveChanges();
-                    return tender;
+                    tenderData.Id = savedTender.Id;
+                    return tenderData;
                 }
             }
             catch (Exception error)
@@ -377,15 +406,23 @@ namespace BusinessLogic
             }
         }
 
-        public TenderStock AddTenderStock(TenderStock data)
+        public TenderStockMobileDTO AddTenderStock(TenderStockMobileDTO data)
         {
             try
             {
                 using(db = new ApplicationDbContext())
                 {
-                    var savedData = db.TenderStock.Add(data);
+                    TenderStock tenderStock = new TenderStock
+                    {
+                        StockId = data.StockId,
+                        TenderId = data.TenderId,
+                        isDeleted = data.isDeleted,
+                        SaleDate = data.SaleDate
+                    };
+                    var savedData = db.TenderStock.Add(tenderStock);
                     db.SaveChanges();
-                    return savedData;
+                    data.Id = savedData.Id;
+                    return data;
                 }
             }
             catch (Exception error)
@@ -419,15 +456,21 @@ namespace BusinessLogic
             }
         }
 
-        public TenderUser AddTenderUser(TenderUser tenderUserData)
+        public TenderUserMobileDTO AddTenderUser(TenderUserMobileDTO tenderUserData)
         {
             try
             {
                 using(db = new ApplicationDbContext())
                 {
-                    var savedData = db.TenderUser.Add(tenderUserData);
+                    TenderUser tenderUser = new TenderUser
+                    {
+                        TenderId = tenderUserData.TenderId,
+                        UserId = tenderUserData.UserId
+                    };
+                    var savedData = db.TenderUser.Add(tenderUser);
                     db.SaveChanges();
-                    return savedData;
+                    tenderUserData.Id = savedData.Id;
+                    return tenderUserData;
                 }
             }
             catch (Exception error)

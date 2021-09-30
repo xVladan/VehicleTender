@@ -1,8 +1,7 @@
 ﻿using BusinessLogic;
+using BusinessLogic.DataTransferObjects.MobileDTO;
 using DataAccessLayer_DAL;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -12,7 +11,7 @@ using VehicleTender.API.Helpers;
 namespace VehicleTender.API.Controllers
 {
     [Authorize(Roles = "admin")]
-    //[EnableCors(origins: "https://localhost:44341/swagger/docs/v1", headers: "*", methods: "*")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class StockController : ApiController
     {
         private MainBLL mainBLL = new MainBLL();
@@ -100,7 +99,7 @@ namespace VehicleTender.API.Controllers
 
         [HttpPost]
         [Route("api/carmodel")]
-        public IHttpActionResult AddCar(CarModel carData)
+        public IHttpActionResult AddCar(CarModelMobileDTO carData)
         {
             try
             {
@@ -152,7 +151,7 @@ namespace VehicleTender.API.Controllers
 
         [HttpPost]
         [Route("api/stock")]
-        public IHttpActionResult AddStock(StockInfo stockData)
+        public IHttpActionResult AddStock(StockInfoMobileDTO stockData)
         {
             try
             {

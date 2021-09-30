@@ -10,7 +10,7 @@ using VehicleTender.API.Helpers;
 namespace VehicleTender.API.Controllers
 {
     [Authorize]
-    [EnableCors(origins: "https://localhost:44341/swagger/docs/v1", headers: "*", methods: "*")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class LocationController : ApiController
     {
         private MobileLogic mobileLogic = new MobileLogic();

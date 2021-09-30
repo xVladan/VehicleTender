@@ -16,7 +16,7 @@ namespace VehicleTender.API.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Account")]
-    [EnableCors(origins: "https://localhost:44341/swagger/docs/v1", headers: "*", methods: "*")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";

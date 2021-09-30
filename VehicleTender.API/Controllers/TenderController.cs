@@ -2,8 +2,6 @@
 using BusinessLogic.DataTransferObjects.MobileDTO;
 using DataAccessLayer_DAL;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -13,7 +11,7 @@ using VehicleTender.API.Helpers;
 namespace VehicleTender.API.Controllers
 {
     [Authorize]
-    //[EnableCors(origins: "https://localhost:44341/swagger/docs/v1", headers: "*", methods: "*")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class TenderController : ApiController
     {
         private MainBLL mainBLL = new MainBLL();
@@ -50,7 +48,7 @@ namespace VehicleTender.API.Controllers
 
         [HttpPost]
         [Route("api/tender")]
-        public IHttpActionResult AddTender(Tender tenderData)
+        public IHttpActionResult AddTender(TenderMobileDTO tenderData)
         {
             try
             {
@@ -100,7 +98,7 @@ namespace VehicleTender.API.Controllers
 
         [HttpPost]
         [Route("api/tenderstock")]
-        public IHttpActionResult AddTenderStock(TenderStock tStockData)
+        public IHttpActionResult AddTenderStock(TenderStockMobileDTO tStockData)
         {
             try
             {
@@ -150,7 +148,7 @@ namespace VehicleTender.API.Controllers
 
         [HttpPost]
         [Route("api/tenderuser")]
-        public IHttpActionResult AddTenderUser(TenderUser tUserData)
+        public IHttpActionResult AddTenderUser(TenderUserMobileDTO tUserData)
         {
             try
             {
