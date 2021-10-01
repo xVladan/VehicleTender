@@ -23,7 +23,7 @@ namespace VehicleTender.Controllers
             {
                 string userId = User.Identity.GetUserId();
                 bool userRole = User.IsInRole("admin");
-                var allTenders = mainBLL.HomeTable(userId,userRole);
+                var allTenders = mainBLL.HomeTable(userId, userRole);
                 return Json(allTenders, JsonRequestBehavior.AllowGet);
             }
             catch (Exception)
@@ -36,7 +36,7 @@ namespace VehicleTender.Controllers
             return View();
         }
         [HttpPost]
-        public JsonResult GetTender(string Id)
+        public JsonResult GetTender(int Id)
         {
             try
             {
@@ -53,7 +53,8 @@ namespace VehicleTender.Controllers
         {
             try
             {
-                var data = mainBLL.GetTenderCars(Id);
+                string userId = User.Identity.GetUserId();
+                var data = mainBLL.GetTenderCars(Id, userId);
                 return Json(data, JsonRequestBehavior.AllowGet);
             }
             catch (Exception)
@@ -62,16 +63,16 @@ namespace VehicleTender.Controllers
             }
         }
         [HttpPost]
-        public JsonResult GetTenderBids(int Id)
+        public void AddBid(int TenderStockId, double Price, int TenderId)
         {
             try
             {
                 string userId = User.Identity.GetUserId();
-                var data = mainBLL.GetBids(Id, userId);
-                return Json(data, JsonRequestBehavior.AllowGet);
+                mainBLL.AddBid(TenderStockId, Price, userId, TenderId);
             }
             catch (Exception)
             {
+
                 throw;
             }
         }

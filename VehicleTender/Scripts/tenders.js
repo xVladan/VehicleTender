@@ -310,7 +310,7 @@ function insertDataIntoTable() {
                             width: '100%',
                             dataSource: args.component.option("dataSource"),
                             keyExpr: "Id",
-                            columns: ["CarModel", "Manufacturer", "ModelNo", "Price", "Mileage", "Comments", "RegNo", "Location"],
+                            columns: ["CarModel", "Manufacturer", "ModelNo", "Year", "Price", "Mileage", "Comments", "RegNo", "Location"],
                             hoverStateEnabled: true,
                             paging: { enabled: true, pageSize: 10 },
                             filterRow: { visible: true },

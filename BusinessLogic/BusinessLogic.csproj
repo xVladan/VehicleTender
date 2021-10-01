@@ -87,8 +87,7 @@
     <Compile Include="DataTransferObjects\MobileDTO\TenderUserMobileDTO.cs" />
     <Compile Include="DataTransferObjects\MobileDTO\UserMobileDTO.cs" />
     <Compile Include="DataTransferObjects\StockDTO.cs" />
-    <Compile Include="DataTransferObjects\TenderBids.cs" />
-    <Compile Include="DataTransferObjects\TenderCarsDTO.cs" />
+    <Compile Include="DataTransferObjects\TenderCarsAndBidsDTO.cs" />
     <Compile Include="DataTransferObjects\TenderDTO.cs" />
     <Compile Include="DataTransferObjects\TenderViewModel.cs" />
     <Compile Include="MainBLL.cs" />
