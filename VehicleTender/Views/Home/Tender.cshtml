@@ -5,7 +5,7 @@
 @section Scripts{
     <script src="~/Scripts/tenderData.js"></script>
 }
-@if (this.User.IsInRole("admins"))
+@if (this.User.IsInRole("admin"))
 {
     <div id="tenderInfoAdmin"> </div>
 }
@@ -23,7 +23,7 @@ else
                 <div class="row">
                     <div class="col-sm font-weight-bold col-sm-2"><b> Seller: </b></div>
                     <div id="sellerName" class="col-sm-4 mb-2"></div>
-                    <div class="col-sm font-weight-bold col-sm-2"><b> Tender Close Date:</b> </div>
+                    <div class="col-sm font-weight-bold col-sm-2"><b> Tender Close Date:</b>  </div>
                     <div id="closeDate" class="col-sm-4 mb-2"></div>
                 </div>
                 <div class="row">
@@ -32,6 +32,8 @@ else
                 </div>
             </div>
         </div>
-        <div id="tenderCars"></div>
+        <div id="beforeSaveing">
+            <div id="tenderCars"></div>
+        </div>
     </div>
 }

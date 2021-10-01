@@ -16,6 +16,7 @@ namespace DataAccessLayer_DAL
         [Display(Name ="Tender Stock")]
         public int TenderStockId { get; set; }
         public double Price { get; set; }
+        public bool isActive { get; set; }
         public bool IsWinningPrice { get; set; }
 
         [ForeignKey("TenderUserId")]

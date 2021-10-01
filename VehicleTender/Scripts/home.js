@@ -25,13 +25,17 @@ function loadData() {
         dataSource: usersDataSource,
         showBorders: true,
         columnAutoWidth: true,
-        columns: [
-            {
-                dataField: "TenderNo",
-                cellTemplate: function (container, options) {
-                    $("<a href='/Home/Tender/" + options.value + "'>" + options.value + "</a>").appendTo(container);
-                }
-            },
+        columns: [{
+            datafield: "Id",
+            visible: false
+        },
+        {
+            dataField: "TenderNo",
+            cellTemplate: function (container, options) {
+                console.log(options)
+                $("<a href='/Home/Tender/" + options.data.Id + "'>" + options.value + "</a>").appendTo(container);
+            }
+        },
             "Dealer", "DealerName", "OpenDate", "CloseDate"],
     }).dxDataGrid("instance");
 }

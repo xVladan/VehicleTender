@@ -3,7 +3,7 @@
 });
 
 function loadData() {
-    if ($("#tenderInfo").length>0) {
+    if ($("#tenderInfo").length > 0) {
         LoadTender();
     } else {
         LoadAdminTenderData();
@@ -15,8 +15,6 @@ function LoadAdminTenderData() {
 async function LoadTender() {
     var tender = await LoadTenderData();
     await LoadTenderCars(tender.Id);
-    await LoadTenderBids(tender.Id);
-    
 }
 async function LoadTenderData() {
     var url = window.location.pathname;
@@ -45,7 +43,7 @@ async function LoadTenderCars(id) {
     let userPromis = $.Deferred();
     let usersDataSource = new DevExpress.data.DataSource({
         id: "dataGrid",
-        key: "Id",
+        key: ["Id", "IdBid"],
         load: () => {
             $.ajax({
                 type: "POST",
@@ -60,26 +58,91 @@ async function LoadTenderCars(id) {
                 }
             });
             return userPromis.promise();
-        }
+        },
+        update: function (key, values) {
+            console.log(key.Id);
+            console.log(key.IdBid);
+            console.log(values.BidPrice);
+            $.ajax({
+                url: "/Home/EditBid",
+                type: "POST",
+                data: JSON.stringify({ TenderStockId: key.Id }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+            });
+            var url = window.location.pathname;
+            var id = url.substring(url.lastIndexOf('/') + 1);
+            $.ajax({
+                url: "/Home/AddBid",
+                type: "POST",
+                data: JSON.stringify({ TenderStockId: key.Id, Price: values.BidPrice, TenderId: id }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+            });
+            dataSource.refresh();
+        },
     })
+
     $("#tenderCars").dxDataGrid({
         dataSource: usersDataSource,
         showBorders: true,
         columnAutoWidth: true,
-        columns: ["Id", "RegNo", "Year", "Make", "CarLine", "Model", "Mileage", "Comments"],
-    }).dxDataGrid("columnOption", "Id", "visible", false);
-    
-}
-async function LoadTenderBids() {
-    $.ajax({
-        type: "POST",
-        url: "/Home/GetTenderBids",
-        data: JSON.stringify({ Id: id }),
-        contentType: 'application/json; charset=utf-8',
-        success: (data) => {
-            debugger;
+        columns: [
+            {
+                dataField: "Id",
+                allowEditing: false,
+                visible: false
+            }, {
+                dataField: "RegNo",
+                allowEditing: false
+            }, {
+                dataField: "Year",
+                allowEditing: false,
+                dataType: 'Text'
+            }, {
+                dataField: "Make",
+                allowEditing: false
+            }, {
+                dataField: "CarLine",
+                allowEditing: false
+            }, {
+                dataField: "Model",
+                allowEditing: false
+            }, {
+                dataField: "Mileage",
+                allowEditing: false,
+                dataType: 'Text'
+            }, {
+                dataField: "Comments",
+                allowEditing: false
+            }, {
+                dataField: "IdBId",
+                allowEditing: true,
+                visible: false
+            },
+            {
+                dataField: "IdBid",
+                allowEditing: false,
+                visible: false
+            }, {
+                dataField: "BidPrice",
+                allowEditing: true
+            }
+        ],
+        editing: {
+            mode: "batch",
+            allowUpdating: true,
+            allowAdding: false,
+            allowDeleting: false,
+            selectTextOnEditStart: true,
+            startEditAction: "click"
         },
-        error: (data) => {
-        }
-    });
+        summary: {
+            totalItems: [{
+                column: "BidPrice",
+                summaryType: "sum",
+                valueFormat: "currency"
+            }]
+        },
+    }).dxDataGrid("instance");
 }

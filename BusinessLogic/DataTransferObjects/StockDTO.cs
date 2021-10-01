@@ -19,6 +19,7 @@ namespace BusinessLogic.DataTransferObjects
         public string Comments { get; set; }
         public string RegNo { get; set; }
         public bool IsSold { get; set; }
+        public int Year { get; set; }
         public string CarModel { get; set; }
         public string FullCarName { get; set; }
     }

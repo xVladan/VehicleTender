@@ -15,6 +15,7 @@ namespace DataAccessLayer_DAL
         public DateTime CreatedDate { get; set; }
         [Display(Name ="Created By")]
         public string UserId { get; set; }
+        [StringLength(50)]
         public string TenderNo { get; set; }
         public DateTime OpenDate { get; set; }
         public DateTime CloseDate { get; set; }

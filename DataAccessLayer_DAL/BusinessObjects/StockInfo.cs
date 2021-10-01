@@ -18,6 +18,7 @@ namespace DataAccessLayer_DAL
         public string Comments { get; set; }
         [Display(Name = "Location")]
         public int LocationId { get; set; }
+        [StringLength(20)]
         public string RegNo { get; set; }
         public int Year { get; set; } 
         public bool IsSold { get; set; }
