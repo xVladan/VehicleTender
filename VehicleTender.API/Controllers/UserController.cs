@@ -112,7 +112,7 @@ namespace VehicleTender.API.Controllers
                 jsonMessage = result.Errors.FirstOrDefault(x => x.Contains("Email"));
                 return BadRequest(jsonMessage);
             }
-            return BadRequest("Please enter password!");
+            return BadRequest("Please check your information.");
         }
 
         [Authorize(Roles = "admin")]
