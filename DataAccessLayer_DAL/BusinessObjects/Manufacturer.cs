@@ -12,6 +12,7 @@ namespace DataAccessLayer_DAL
         [Key]
         public int Id { get; set; }
         [Required]
+        [StringLength(20)]
         public string ManufacturerName { get; set; }
     }
 }
