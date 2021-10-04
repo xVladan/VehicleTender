@@ -123,6 +123,16 @@ function insertDataIntoTable() {
     $("#dataGrid").dxDataGrid({
         dataSource: stock,
         showBorders: true,
+        paging: {
+            pageSize: 10
+        },
+        pager: {
+            visible: true,
+            allowedPageSizes: [10, 15, 50, 100],
+            showPageSizeSelector: true,
+            showInfo: true,
+            showNavigationButtons: true
+        },
         editing: {
             mode: "popup",
             allowUpdating: true,
@@ -186,7 +196,7 @@ function insertDataIntoTable() {
             {
                 dataField: "Id",
                 caption: "Number",
-                width: "10%",
+                width: "6%",
                 dataType: "text",
                 /*visible: false,*/
                 allowEditing: false,
@@ -202,25 +212,30 @@ function insertDataIntoTable() {
                     dataSource: dropDownData(),
                     valueExpr: "id",
                     displayExpr: "text"
-                }
+                },
+                width:"20%"
             },
             {
                 dataField: "Year",
                 dataType: "text",
                 caption: "Year",
+                width: "5%",
             },
             {
                 dataField: "Mileage",
-                width: "10%",
+                width: "8%",
                 dataType: "text",
             },
             {
                 dataField: "Price",
                 dataType: "text",
                 caption: "Price",
+                width: "8%",
             },
             {
-                dataField: "Comments",
+                dataField: "RegNo",
+                caption: "Registration Number",
+                witdh: "8%",
             },
             {
                 dataField: "LocationId",
@@ -233,9 +248,9 @@ function insertDataIntoTable() {
                 }
             },
             {
-                dataField: "RegNo",
-                caption: "Registration Number",
+                dataField: "Comments",
             },
+            
             //{
             //    dataField: "SaledDate",
             //    caption: "Saled Date",
