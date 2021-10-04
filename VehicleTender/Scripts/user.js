@@ -88,6 +88,16 @@ function getAllUsers() {
     $("#usersGrid").dxDataGrid({
         dataSource: usersDataSource,
         showBorders: true,
+        paging: {
+            pageSize: 10
+        },
+        pager: {
+            visible: true,
+            allowedPageSizes: [10, 15, 50, 100],
+            showPageSizeSelector: true,
+            showInfo: true,
+            showNavigationButtons: true
+        },
         columnAutoWidth: true,
         editing: {
             refreshMode: "full",

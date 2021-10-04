@@ -13,6 +13,7 @@ function LoadAdminTenderData() {
 }
 
 async function LoadTender() {
+    console.log("a");
     var tender = await LoadTenderData();
     await LoadTenderCars(tender.Id);
 }

@@ -9,7 +9,7 @@ function loadData() {
         load: () => {
             $.ajax({
                 type: "POST",
-                url: "/home/GetTenders",
+                url: "/Home/GetTenders",
                 contentType: "application/json",
                 success: (data) => {
                     userPromis.resolve(data);
@@ -24,6 +24,16 @@ function loadData() {
     $("#homeTable").dxDataGrid({
         dataSource: usersDataSource,
         showBorders: true,
+        paging: {
+            pageSize: 10
+        },
+        pager: {
+            visible: true,
+            allowedPageSizes: [10, 15, 50, 100],
+            showPageSizeSelector: true,
+            showInfo: true,
+            showNavigationButtons: true
+        },
         columnAutoWidth: true,
         columns: [{
             datafield: "Id",

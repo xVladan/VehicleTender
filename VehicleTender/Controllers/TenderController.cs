@@ -49,7 +49,7 @@ namespace VehicleTender.Controllers
 
         [HttpPost]
 
-        public void EditTender(Tender tenderModel)
+        public void EditTender(TenderDTO tenderModel)
         {
             try
             {

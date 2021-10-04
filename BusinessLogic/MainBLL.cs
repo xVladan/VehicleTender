@@ -580,55 +580,34 @@ namespace BusinessLogic
         ///////////////////////////// 
         //    TENDER
         ///////////////////////////
-        public List<TenderViewModel> TenderEntries()
+        public List<TenderDTO> TenderEntries()
         {
             try
             {
                 using (db = new ApplicationDbContext())
                 {
                     var dbTender = db.Tender.ToList();
-                    List<TenderViewModel> tenders = new List<TenderViewModel>();
+                    List<TenderDTO> tenders = new List<TenderDTO>();
 
                     foreach (var tender in dbTender)
                     {
-                        var result = new TenderViewModel
+                        var result = new TenderDTO
                         {
                             Id = tender.Id,
-                            CreatedDate = tender.CreatedDate.ToShortDateString(),
+                            CreatedDate = tender.CreatedDate.ToString(),
                             UserId = tender.User.Id,
                             TenderNo = tender.TenderNo,
                             OpenDate = tender.OpenDate.ToString(),
                             CloseDate = tender.CloseDate.ToString(),
-                            StatusId = tender.Status.Id
+                            StatusId = tender.Status.Id,
+                            TenderStockId = db.TenderStock.Where(x => x.TenderId == tender.Id).Select(x => x.StockId).ToList(),
+                            TenderUserId = db.TenderUser.Where(x => x.TenderId == tender.Id).Select(x => x.UserId).ToList(),
                             //StatusId = dbTender.FirstOrDefault(role => role.Id == tender.Id)
                         };
                         tenders.Add(result);
                     }
                     return tenders;
                 }
-                //using (db = new ApplicationDbContext())
-                //{
-                //  var tenders = db.Tender.ToList();
-                //var tenders = db.Tender
-                //    .Include(x => x.Stock)
-                //    .Include(x => x.Stock.Car.Manufacturer)
-                //    .Include(x => x.Stock.Car)
-                //    .Include(x => x.Stock.Location)
-                //    .Select(x => new StockDTO
-                //    {
-                //        Id = x.Stock.Id,
-                //        Comments = x.Stock.Comments,
-                //        ModelLineId = x.Stock.ModelLineId,
-                //        IsSold = x.Stock.IsSold,
-                //        LocationId = x.Stock.LocationId,
-                //        Mileage = x.Stock.Mileage,
-                //        Price = x.Stock.Price,
-                //        RegNo = x.Stock.RegNo,
-                //        CarModel = x.Stock.Car.ModelName
-                //    })
-                //    .ToList();
-                // return tenders;
-                //}
             }
             catch (Exception)
             {
@@ -644,9 +623,9 @@ namespace BusinessLogic
                 {
                     Tender t = new Tender
                     {
-                        CloseDate = tender.CloseDate,
-                        CreatedDate = tender.CreatedDate,
-                        OpenDate = tender.OpenDate,
+                        CloseDate = DateTime.Parse(tender.CloseDate),
+                        CreatedDate = DateTime.Parse(tender.CreatedDate),
+                        OpenDate = DateTime.Parse(tender.OpenDate),
                         StatusId = tender.StatusId,
                         TenderNo = tender.TenderNo,
                         UserId = tender.UserId,
@@ -681,20 +660,24 @@ namespace BusinessLogic
             }
         }
 
-        public void EditTender(Tender editedTender)
+        public void EditTender(TenderDTO editedTender)
         {
             try
             {
                 using (db = new ApplicationDbContext())
                 {
+                    Tender t = new Tender();
+                    
                     var editedSingleId = db.Tender.FirstOrDefault(x => x.Id == editedTender.Id);
                     editedSingleId.Id = editedTender.Id;
                     editedSingleId.UserId = editedTender.UserId;
-                    editedSingleId.CreatedDate = editedTender.CreatedDate;
-                    editedSingleId.OpenDate = editedTender.OpenDate;
-                    editedSingleId.CloseDate = editedTender.CloseDate;
+                    editedSingleId.CreatedDate = DateTime.Parse(editedTender.CreatedDate);
+                    editedSingleId.OpenDate = DateTime.Parse(editedTender.OpenDate);
+                    editedSingleId.CloseDate = DateTime.Parse(editedTender.CloseDate);
                     editedSingleId.StatusId = editedTender.StatusId;
                     editedSingleId.TenderNo = editedTender.TenderNo;
+                
+                    var savedTender = db.Tender.Add(t);
                     db.SaveChanges();
                 }
             }
@@ -703,7 +686,6 @@ namespace BusinessLogic
                 throw;
             }
         }
-
 
 
 

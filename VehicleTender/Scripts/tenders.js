@@ -29,12 +29,13 @@ function insertDataIntoTable() {
                 url: "/Tender/CreateTender",
                 type: "POST",
                 data: JSON.stringify({
-                    tender: values 
+                    tender: values
                 }),
                 contentType: 'application/json; charset=utf-8',
             });
         },
         update: function (key, values) {
+            debugger;
             let tenderArray = tender.items();
             let editedTender = tenderArray.find(item => item.Id === key)
             editedTender = {
@@ -45,6 +46,8 @@ function insertDataIntoTable() {
                 OpenDate: values.OpenDate ? values.OpenDate : editedTender.OpenDate,
                 CloseDate: values.CloseDate ? values.CloseDate : editedTender.CloseDate,
                 StatusId: values.StatusId ? values.StatusId : editedTender.StatusId,
+                TenderStockId: values.TenderStockId ? values.TenderStockId : editedTender.TenderStockId,
+                TenderUserId: values.TenderUserId ? values.TenderUserId : editedTender.TenderUserId,
             }
             $.ajax({
                 url: "/Tender/EditTender",
@@ -53,9 +56,8 @@ function insertDataIntoTable() {
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
             });
-            console.log(editedTender);
         },
-        
+
     });
 
     function dropDownTenderStatusData() {
@@ -167,6 +169,16 @@ function insertDataIntoTable() {
     $("#tenderGrid").dxDataGrid({
         dataSource: tender,
         showBorders: true,
+        paging: {
+            pageSize: 10
+        },
+        pager: {
+            visible: true,
+            allowedPageSizes: [10, 15, 50, 100],
+            showPageSizeSelector: true,
+            showInfo: true,
+            showNavigationButtons: true
+        },
         editing: {
             mode: "popup",
             allowUpdating: true,
