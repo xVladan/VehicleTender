@@ -440,6 +440,33 @@ namespace BusinessLogic
             }
         }
 
+        public TenderStockMobileDTO EditTenderStock(TenderStockMobileDTO data)
+        {
+            try
+            {
+                using(db = new ApplicationDbContext())
+                {
+                    var tenderStockById = db.TenderStock.FirstOrDefault(tS => tS.Id == data.Id);
+                    tenderStockById.isDeleted = data.isDeleted;
+                    tenderStockById.SaleDate = data.SaleDate;
+                    db.SaveChanges();
+                    TenderStockMobileDTO savedData = new TenderStockMobileDTO 
+                    {
+                        Id = tenderStockById.Id,
+                        StockId = tenderStockById.StockId,
+                        TenderId = tenderStockById.TenderId,
+                        SaleDate = tenderStockById.SaleDate,
+                        isDeleted = tenderStockById.isDeleted
+                    };
+                    return savedData;
+                }
+            }
+            catch (Exception error)
+            {
+                throw error;
+            }
+        }
+
         public List<TenderUserMobileDTO> AllTenderUsers()
         {
             try
