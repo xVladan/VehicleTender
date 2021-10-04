@@ -61,6 +61,28 @@ namespace VehicleTender.API.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("api/tender")]
+        public IHttpActionResult EditTender(TenderMobileDTO editData)
+        {
+            try
+            {
+                int tenderId = editData.Id;
+                int statusId = editData.StatusId;
+                var editedTender = mobileLogic.EditTender(tenderId, statusId);
+                if(editedTender == null)
+                {
+                    return NotFound();
+                }
+                return Ok(editedTender);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
+        }
+
         [HttpGet]
         [Route("api/tenderstocks")]
         public IHttpActionResult GetTenderStocks()

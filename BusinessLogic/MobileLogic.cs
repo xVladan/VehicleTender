@@ -353,6 +353,33 @@ namespace BusinessLogic
             }
         }
 
+        public TenderMobileDTO EditTender(int tenderId, int statusId)
+        {
+            try
+            {
+                using(db = new ApplicationDbContext())
+                {
+                    var tenderById = db.Tender.FirstOrDefault(tender => tender.Id == tenderId);
+                    tenderById.StatusId = statusId;
+                    db.SaveChanges();
+                    return new TenderMobileDTO
+                    {
+                        Id = tenderById.Id,
+                        CreatedDate = tenderById.CreatedDate,
+                        UserId = tenderById.UserId,
+                        TenderNo = tenderById.TenderNo,
+                        OpenDate = tenderById.OpenDate,
+                        CloseDate = tenderById.CloseDate,
+                        StatusId = tenderById.StatusId
+                    };
+                }
+            }
+            catch (Exception error)
+            {
+                throw error;
+            }
+        }
+
         public List<TenderStatus> GetTenderStatuses()
         {
             try
@@ -420,6 +447,11 @@ namespace BusinessLogic
             {
                 using(db = new ApplicationDbContext())
                 {
+                    var dbTenderStocks = db.TenderStock.Where(tS => tS.StockId == data.StockId && tS.TenderId == data.TenderId).ToList();
+                    if(dbTenderStocks.Count != 0)
+                    {
+                        throw new Exception("Stock already exists!");
+                    }
                     TenderStock tenderStock = new TenderStock
                     {
                         StockId = data.StockId,
@@ -429,8 +461,15 @@ namespace BusinessLogic
                     };
                     var savedData = db.TenderStock.Add(tenderStock);
                     db.SaveChanges();
-                    data.Id = savedData.Id;
-                    return data;
+ 
+                    return new TenderStockMobileDTO 
+                    {
+                        Id = savedData.Id,
+                        StockId = savedData.StockId,
+                        TenderId = savedData.TenderId,
+                        isDeleted = savedData.isDeleted,
+                        SaleDate = savedData.SaleDate
+                    };
                 }
             }
             catch (Exception error)
