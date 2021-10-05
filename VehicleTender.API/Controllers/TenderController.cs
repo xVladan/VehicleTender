@@ -267,5 +267,25 @@ namespace VehicleTender.API.Controllers
                 return errorHandler.HandleError();
             }
         }
+
+        [HttpPut]
+        [Route("api/bid")]
+        public IHttpActionResult SetWiningBid(BidMobileDTO bidData)
+        {
+            try
+            {
+                var changedBid = mobileLogic.SetWiningBid(bidData);
+                if (changedBid == null)
+                {
+                    return NotFound();
+                }
+                return Ok(changedBid);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
+        }
     }
 }

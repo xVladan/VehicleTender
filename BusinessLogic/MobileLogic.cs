@@ -595,6 +595,7 @@ namespace BusinessLogic
                             TenderStockId = bid.TenderStockId,
                             TenderUserId = bid.TenderUserId,
                             IsWinningPrice = bid.IsWinningPrice,
+                            isActive = bid.isActive,
                             Price = bid.Price
                         })
                         .ToList();
@@ -646,6 +647,30 @@ namespace BusinessLogic
                 throw error;
             }
         }
-
+        public BidMobileDTO SetWiningBid(BidMobileDTO bidData)
+        {
+            try
+            {
+                using(db = new ApplicationDbContext())
+                {
+                    var bid = db.Bid.FirstOrDefault(b => b.TenderStockId == bidData.TenderStockId && b.TenderUserId == bidData.TenderUserId && b.isActive == true);
+                    bid.IsWinningPrice = true;
+                    db.SaveChanges();
+                    return new BidMobileDTO
+                    {
+                        Id = bid.Id,
+                        TenderStockId = bid.TenderStockId,
+                        TenderUserId = bid.TenderUserId,
+                        Price = bid.Price,
+                        IsWinningPrice = bid.IsWinningPrice,
+                        isActive = bid.isActive
+                    };
+                }
+            }
+            catch (Exception error)
+            {
+                throw error;
+            }
+        }
     }
 }
