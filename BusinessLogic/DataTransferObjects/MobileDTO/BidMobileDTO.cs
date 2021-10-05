@@ -12,6 +12,7 @@ namespace BusinessLogic.DataTransferObjects.MobileDTO
         public int TenderUserId { get; set; }
         public int TenderStockId { get; set; }
         public double Price { get; set; }
+        public bool isActive { get; set; }
         public bool IsWinningPrice { get; set; }
     }
 }

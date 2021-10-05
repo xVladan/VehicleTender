@@ -275,6 +275,34 @@ namespace BusinessLogic
             }
         }
 
+        public StockInfoMobileDTO EditStock(StockInfoMobileDTO stockData)
+        {
+            try
+            {
+                using (db = new ApplicationDbContext())
+                {
+                    var stockById = db.StockInfo.FirstOrDefault(stock => stock.Id == stockData.Id);
+                    stockById.IsSold = stockData.IsSold;
+                    db.SaveChanges();
+                    return new StockInfoMobileDTO {
+                        Id = stockById.Id,
+                        ModelLineId = stockById.ModelLineId,
+                        Mileage = stockById.Mileage,
+                        Price = stockById.Price,
+                        Comments = stockById.Comments,
+                        LocationId = stockById.LocationId,
+                        RegNo = stockById.RegNo,
+                        IsSold = stockById.IsSold,
+                        SaledDate = stockById.SaledDate
+                    };
+                }
+            }
+            catch (Exception error)
+            {
+                throw error;
+            }
+        }
+
         // Location methods 
 
         public Location SaveLocationInDB(Location location)
@@ -590,12 +618,27 @@ namespace BusinessLogic
                         TenderStockId = bidData.TenderStockId,
                         TenderUserId = bidData.TenderUserId,
                         IsWinningPrice = bidData.IsWinningPrice,
+                        isActive = true,
                         Price = bidData.Price
                     };
+                    var bids = db.Bid.Where(b => b.TenderStockId == bid.TenderStockId && b.TenderUserId == bid.TenderUserId).ToList();
+                    if(bids.Count != 0)
+                    {
+                        foreach(var b in bids)
+                        {
+                            b.isActive = false;
+                        }
+                    }
                     var storedBid = db.Bid.Add(bid);
                     db.SaveChanges();
-                    bidData.Id = storedBid.Id;
-                    return bidData;
+                    return new BidMobileDTO {
+                        Id = storedBid.Id,
+                        TenderStockId = storedBid.TenderStockId,
+                        TenderUserId = storedBid.TenderUserId,
+                        Price = storedBid.Price,
+                        IsWinningPrice = storedBid.IsWinningPrice,
+                        isActive = storedBid.isActive
+                    };
                 }
             }
             catch (Exception error)

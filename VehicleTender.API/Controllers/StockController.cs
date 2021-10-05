@@ -143,5 +143,25 @@ namespace VehicleTender.API.Controllers
                 return errorHandler.HandleError();
             }
         }
+
+        [HttpPut]
+        [Route("api/stock")]
+        public IHttpActionResult EditStock(StockInfoMobileDTO editData)
+        {
+            try
+            {
+                var data = mobileLogic.EditStock(editData);
+                if(data == null)
+                {
+                    return NotFound();
+                }
+                return Ok(data);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
+        }
     }
 }
