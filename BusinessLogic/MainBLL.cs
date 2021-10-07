@@ -725,19 +725,9 @@ namespace BusinessLogic
             {
                 using (db = new ApplicationDbContext())
                 {
-                    var tenders = db.Tender.Include(x => x.User).ToList();
-                    var tenderUser = db.TenderUser.Where(u => u.UserId == userId).ToList();
-                    List<HomeTableDTO> tenderList = new List<HomeTableDTO>();
-                    if (userRole != true)
-                    { 
-                         foreach(var tU in tenderUser)
-                        {
-                            tenders.RemoveAll(t => t.Id != tU.TenderId);
-                        }
-                    }
-                    foreach (var tender in tenders)
-                    {
-                        var a = new HomeTableDTO
+                    var tenders = db.Tender
+                        .Include(x => x.User)
+                        .Select(tender => new HomeTableDTO 
                         {
                             Id = tender.Id,
                             TenderNo = tender.TenderNo,
@@ -745,9 +735,26 @@ namespace BusinessLogic
                             DealerName = tender.User.FirstName + " " + tender.User.LastName,
                             OpenDate = tender.OpenDate.ToString().Substring(0, 10),
                             CloseDate = tender.CloseDate.ToString().Substring(0, 10)
-
-                        };
-                        tenderList.Add(a);
+                        })
+                        .ToList();
+                    var tenderUser = db.TenderUser.Where(u => u.UserId == userId).ToList();
+                    List<HomeTableDTO> tenderList = new List<HomeTableDTO>();
+                    if (userRole != true)
+                    { 
+                         foreach(var tU in tenderUser)
+                        {
+                            foreach(var t in tenders)
+                            {
+                                if(t.Id == tU.TenderId)
+                                {
+                                    tenderList.Add(t);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return tenders;
                     }
                     return tenderList;
                 }
