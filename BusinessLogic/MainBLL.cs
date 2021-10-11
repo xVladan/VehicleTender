@@ -865,22 +865,7 @@ namespace BusinessLogic
                 throw;
             }
         }
-        public void EditBid(int Id)
-        {
-            try
-            {
-                using (db = new ApplicationDbContext())
-                {
-                    var userBid = db.Bid.FirstOrDefault(x => x.Id == Id);
-                    userBid.isActive = false;
-                    db.SaveChanges();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+
         public void AddBid(int TenderStockId, double Price, string userId, int TenderId)
         {
             try

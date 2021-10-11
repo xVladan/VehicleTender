@@ -211,16 +211,6 @@ async function LoadTenderCars(id) {
             return userPromis.promise();
         },
         update: function (key, values) {
-            //console.log(key.Id);
-            //console.log(key.IdBid);
-            //console.log(values.BidPrice);
-            //$.ajax({
-            //    url: "/Home/EditBid",
-            //    type: "POST",
-            //    data: JSON.stringify({ TenderStockId: key.Id }),
-            //    dataType: 'json',
-            //    contentType: 'application/json; charset=utf-8',
-            //});
             var url = window.location.pathname;
             var id = url.substring(url.lastIndexOf('/') + 1);
             $.ajax({
