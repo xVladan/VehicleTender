@@ -76,6 +76,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataTransferObjects\BidDTO.cs" />
     <Compile Include="DataTransferObjects\GenericDropdown.cs" />
     <Compile Include="DataTransferObjects\HomeTableDTO.cs" />
     <Compile Include="DataTransferObjects\MobileDTO\BidMobileDTO.cs" />
