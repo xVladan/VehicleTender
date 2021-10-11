@@ -42,7 +42,6 @@ function loadData() {
         {
             dataField: "TenderNo",
             cellTemplate: function (container, options) {
-                console.log(options)
                 $("<a href='/Home/Tender/" + options.data.Id + "'>" + options.value + "</a>").appendTo(container);
             }
         },

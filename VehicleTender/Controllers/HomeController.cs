@@ -53,15 +53,38 @@ namespace VehicleTender.Controllers
         {
             try
             {
-                string userId = User.Identity.GetUserId();
-                var data = mainBLL.GetTenderCars(Id, userId);
-                return Json(data, JsonRequestBehavior.AllowGet);
+                var adminRole = User.IsInRole("admin");
+                
+                if(adminRole == true)
+                {
+                    var data = mainBLL.GetTenderCars(Id, null);
+                    return Json(data, JsonRequestBehavior.AllowGet);
+                } else
+                {
+                    string userId = User.Identity.GetUserId();
+                    var data = mainBLL.GetTenderCars(Id, userId);
+                    return Json(data, JsonRequestBehavior.AllowGet);
+                }
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+        public JsonResult GetBids(int id, int stockId)
+        {
+            try
+            {
+                var bids = mainBLL.BidsByTenderIdAndStockId(id, stockId);
+                return Json(bids, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         [HttpPost]
         public void AddBid(int TenderStockId, double Price, int TenderId)
         {
@@ -69,6 +92,20 @@ namespace VehicleTender.Controllers
             {
                 string userId = User.Identity.GetUserId();
                 mainBLL.AddBid(TenderStockId, Price, userId, TenderId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public void SelectWinnerBid(int Id, int tenderId)
+        {
+            try
+            {
+                mainBLL.SaveWinnerBid(Id, tenderId);
             }
             catch (Exception)
             {

@@ -9,11 +9,31 @@ function loadData() {
         LoadAdminTenderData();
     }
 }
+
 function LoadAdminTenderData() {
+    var url = window.location.pathname;
+    var id = url.substring(url.lastIndexOf('/') + 1);
+    $.ajax({
+        url: "/Home/GetTender",
+        type: "POST",
+        data: JSON.stringify({ Id: id }),
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        success: (tender) => {
+            $("#tenderNo").text(tender.TenderNo);
+            $("#openDate").text(tender.OpenDate);
+            $("#sellerName").text(tender.Dealer);
+            $("#closeDate").text(tender.CloseDate);
+            $("#tenderContact").text(tender.DealerName);
+        },
+        error: (tenderPromis) => {
+            console.log(tenderPromis);
+        }
+    });
+    loadAdminTenderCarsGrid(id);
 }
 
 async function LoadTender() {
-    console.log("a");
     var tender = await LoadTenderData();
     await LoadTenderCars(tender.Id);
 }
@@ -40,6 +60,136 @@ async function LoadTenderData() {
         }
     });
 }
+
+function loadBids(tenderId, stockId) {
+    let bidsPromis = $.Deferred();
+    let tenderBidsDataSource = new DevExpress.data.DataSource({
+        key: "Id",
+        load: () => {
+            $.ajax({
+                type: "POST",
+                url: "/Home/GetBids",
+                data: JSON.stringify({ Id: tenderId, stockId: stockId }),
+                contentType: 'application/json; charset=utf-8',
+                success: (data) => {
+                    bidsPromis.resolve(data);
+                },
+                error: (data) => {
+                    bidsPromis.reject(data);
+                }
+            });
+            return bidsPromis.promise();
+        },
+        update: function (key) {
+            $.ajax({
+                url: "/Home/SelectWinnerBid",
+                type: "POST",
+                data: JSON.stringify({ Id: key, tenderId: tenderId }),
+                contentType: 'application/json; charset=utf-8',
+            });
+            location.replace("/");
+        }
+    });
+    return tenderBidsDataSource;
+}
+
+function loadCars(id) {
+    let tenderCarsPromis = $.Deferred();
+    let tenderCarsDataSource = new DevExpress.data.DataSource({
+        id: "tenderCarsGrid",
+        key: "Id",
+        load: () => {
+            $.ajax({
+                type: "POST",
+                url: "/Home/GetTenderCars",
+                data: JSON.stringify({ Id: id }),
+                contentType: 'application/json; charset=utf-8',
+                success: (data) => {
+                    tenderCarsPromis.resolve(data);
+                },
+                error: (data) => {
+                    tenderCarsPromis.reject(data);
+                }
+            });
+            return tenderCarsPromis.promise();
+        }
+    });
+    return tenderCarsDataSource;
+}
+
+async function loadAdminTenderCarsGrid(id) {
+    $("#tenderStocks").dxDataGrid({
+        dataSource: loadCars(id),
+        keyExpr: "Id",
+        showBorders: true,
+        columnAutoWidth: true,
+        columns: [
+            {
+                dataField: "Id",
+                allowEditing: false,
+                visible: false
+            }, {
+                dataField: "RegNo",
+                allowEditing: false
+            }, {
+                dataField: "Year",
+                allowEditing: false,
+                dataType: 'Text'
+            }, {
+                dataField: "Make",
+                allowEditing: false
+            }, {
+                dataField: "CarLine",
+                allowEditing: false
+            }, {
+                dataField: "Model",
+                allowEditing: false
+            }, {
+                dataField: "Mileage",
+                allowEditing: false,
+                dataType: 'Text'
+            }, {
+                dataField: "Comments",
+                allowEditing: false
+            }
+        ],
+        masterDetail: {
+            enabled: true,
+            template: function (container, options) {
+                const stockId = options.data.Id;
+                $("<div>")
+                    .dxDataGrid({
+                        dataSource: loadBids(id, stockId),
+                        columnAutoWidth: true,
+                        showBorders: true,
+                        editing: {
+                            mode: "batch",
+                            allowUpdating: true,
+                            allowAdding: false,
+                            allowDeleting: false,
+                            selectTextOnEditStart: true,
+                            startEditAction: "click"
+                        },
+                        columns: [
+                            {
+                                dataField: "BidderName",
+                                allowEditing: false
+                            },
+                            {
+                                dataField: "Price",
+                                allowEditing: false
+                            },
+                            {
+                                dataField: "IsWinningPrice",
+                                caption: "Winner",
+                            },
+                        ]
+                    }).appendTo(container);
+            }
+        }
+    }).dxDataGrid("instance");
+}
+
 async function LoadTenderCars(id) {
     let userPromis = $.Deferred();
     let usersDataSource = new DevExpress.data.DataSource({
@@ -61,16 +211,16 @@ async function LoadTenderCars(id) {
             return userPromis.promise();
         },
         update: function (key, values) {
-            console.log(key.Id);
-            console.log(key.IdBid);
-            console.log(values.BidPrice);
-            $.ajax({
-                url: "/Home/EditBid",
-                type: "POST",
-                data: JSON.stringify({ TenderStockId: key.Id }),
-                dataType: 'json',
-                contentType: 'application/json; charset=utf-8',
-            });
+            //console.log(key.Id);
+            //console.log(key.IdBid);
+            //console.log(values.BidPrice);
+            //$.ajax({
+            //    url: "/Home/EditBid",
+            //    type: "POST",
+            //    data: JSON.stringify({ TenderStockId: key.Id }),
+            //    dataType: 'json',
+            //    contentType: 'application/json; charset=utf-8',
+            //});
             var url = window.location.pathname;
             var id = url.substring(url.lastIndexOf('/') + 1);
             $.ajax({
@@ -80,7 +230,6 @@ async function LoadTenderCars(id) {
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
             });
-            dataSource.refresh();
         },
     })
 
