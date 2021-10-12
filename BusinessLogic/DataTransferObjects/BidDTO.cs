@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.DataTransferObjects
 {
-    public class TenderBids
+    public class BidDTO
     {
         public int Id { get; set; }
-        public int TenderUserId { get; set; }
+        public string BidderName { get; set; }
         public int TenderStockId { get; set; }
+        public int TenderUserId { get; set; }
+        public int StockId { get; set; }
         public double Price { get; set; }
-        public bool IsWiningPrice { get; set; }
+        public bool IsWinningPrice { get; set; }
     }
 }

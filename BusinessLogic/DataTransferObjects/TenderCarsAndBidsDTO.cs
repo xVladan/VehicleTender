@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.DataTransferObjects
 {
-    public class TenderCarsDTO
+    public class TenderCarsAndBidsDTO
     {
         public int Id { get; set; }
+        public string BidderName { get; set; }
+        public int TenderStockId { get; set; }
         public string RegNo {get; set; }
         public int Year { get; set; }
         public string Make { get; set; }
@@ -16,5 +18,7 @@ namespace BusinessLogic.DataTransferObjects
         public string Model { get; set; }
         public double Mileage { get; set; }
         public string Comments { get; set; }
+        public int? IdBid { get; set; }
+        public double? BidPrice { get; set; }
     }
 }

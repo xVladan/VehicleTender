@@ -322,6 +322,7 @@ namespace BusinessLogic
                             CarModel = x.Car.ModelName,
                             LocationId = x.LocationId,
                             ModelLineId = x.ModelLineId,
+                            Year = x.Year
                         })
                         .ToList();
 
@@ -364,6 +365,7 @@ namespace BusinessLogic
                     modelById.LocationId = stockModel.LocationId;
                     modelById.RegNo = stockModel.RegNo;
                     modelById.IsSold = stockModel.IsSold;
+                    modelById.Year = stockModel.Year;
                     db.SaveChanges();
                 }
             }
@@ -405,6 +407,7 @@ namespace BusinessLogic
                         Price = p.Price,
                         RegNo = p.RegNo,
                         CarModel = p.Car.ModelName,
+                        Year = p.Year,
                         FullCarName = p.Car.Manufacturer.ManufacturerName + " " + p.Car.ModelName
                     }).OrderBy(x => x.Id).ToList();
                     return listFormDb;
@@ -577,55 +580,34 @@ namespace BusinessLogic
         ///////////////////////////// 
         //    TENDER
         ///////////////////////////
-        public List<TenderViewModel> TenderEntries()
+        public List<TenderDTO> TenderEntries()
         {
             try
             {
                 using (db = new ApplicationDbContext())
                 {
                     var dbTender = db.Tender.ToList();
-                    List<TenderViewModel> tenders = new List<TenderViewModel>();
+                    List<TenderDTO> tenders = new List<TenderDTO>();
 
                     foreach (var tender in dbTender)
                     {
-                        var result = new TenderViewModel
+                        var result = new TenderDTO
                         {
                             Id = tender.Id,
-                            CreatedDate = tender.CreatedDate.ToShortDateString(),
+                            CreatedDate = tender.CreatedDate.ToString(),
                             UserId = tender.User.Id,
                             TenderNo = tender.TenderNo,
                             OpenDate = tender.OpenDate.ToString(),
                             CloseDate = tender.CloseDate.ToString(),
-                            StatusId = tender.Status.Id
+                            StatusId = tender.Status.Id,
+                            TenderStockId = db.TenderStock.Where(x => x.TenderId == tender.Id && x.isDeleted == false).Select(x => x.StockId).ToList(),
+                            TenderUserId = db.TenderUser.Where(x => x.TenderId == tender.Id && x.isDeleted == false).Select(x => x.UserId).ToList(),
                             //StatusId = dbTender.FirstOrDefault(role => role.Id == tender.Id)
                         };
                         tenders.Add(result);
                     }
                     return tenders;
                 }
-                //using (db = new ApplicationDbContext())
-                //{
-                //  var tenders = db.Tender.ToList();
-                //var tenders = db.Tender
-                //    .Include(x => x.Stock)
-                //    .Include(x => x.Stock.Car.Manufacturer)
-                //    .Include(x => x.Stock.Car)
-                //    .Include(x => x.Stock.Location)
-                //    .Select(x => new StockDTO
-                //    {
-                //        Id = x.Stock.Id,
-                //        Comments = x.Stock.Comments,
-                //        ModelLineId = x.Stock.ModelLineId,
-                //        IsSold = x.Stock.IsSold,
-                //        LocationId = x.Stock.LocationId,
-                //        Mileage = x.Stock.Mileage,
-                //        Price = x.Stock.Price,
-                //        RegNo = x.Stock.RegNo,
-                //        CarModel = x.Stock.Car.ModelName
-                //    })
-                //    .ToList();
-                // return tenders;
-                //}
             }
             catch (Exception)
             {
@@ -641,9 +623,9 @@ namespace BusinessLogic
                 {
                     Tender t = new Tender
                     {
-                        CloseDate = tender.CloseDate,
-                        CreatedDate = tender.CreatedDate,
-                        OpenDate = tender.OpenDate,
+                        CloseDate = DateTime.Parse(tender.CloseDate),
+                        CreatedDate = DateTime.Parse(tender.CreatedDate),
+                        OpenDate = DateTime.Parse(tender.OpenDate),
                         StatusId = tender.StatusId,
                         TenderNo = tender.TenderNo,
                         UserId = tender.UserId,
@@ -678,20 +660,68 @@ namespace BusinessLogic
             }
         }
 
-        public void EditTender(Tender editedTender)
+        public void EditTender(TenderDTO editedTender)
         {
             try
             {
                 using (db = new ApplicationDbContext())
                 {
+                    var TenderStockDB = db.TenderStock.Where(x => x.TenderId == editedTender.Id);
+                    var TenderUserDB = db.TenderUser.Where(x => x.TenderId == editedTender.Id);
+
+                    foreach (var stock in TenderStockDB)
+                    {
+                        stock.isDeleted = true;
+                    }
+
+                    foreach (var user in TenderUserDB)
+                    {
+                        user.isDeleted = true;
+                    }
+
                     var editedSingleId = db.Tender.FirstOrDefault(x => x.Id == editedTender.Id);
                     editedSingleId.Id = editedTender.Id;
                     editedSingleId.UserId = editedTender.UserId;
-                    editedSingleId.CreatedDate = editedTender.CreatedDate;
-                    editedSingleId.OpenDate = editedTender.OpenDate;
-                    editedSingleId.CloseDate = editedTender.CloseDate;
+                    editedSingleId.CreatedDate = DateTime.Parse(editedTender.CreatedDate);
+                    editedSingleId.OpenDate = DateTime.Parse(editedTender.OpenDate);
+                    editedSingleId.CloseDate = DateTime.Parse(editedTender.CloseDate);
                     editedSingleId.StatusId = editedTender.StatusId;
                     editedSingleId.TenderNo = editedTender.TenderNo;
+
+                    foreach (var tS in editedTender.TenderStockId)
+                    {
+                        if (TenderStockDB.Where(x => x.StockId == tS).FirstOrDefault() != null)
+                        {
+                            TenderStockDB.Where(x => x.StockId == tS).First().isDeleted = false;
+                        }
+                        else
+                        {
+                            TenderStock tenderStock = new TenderStock
+                            {
+                                TenderId = editedSingleId.Id,
+                                StockId = tS,
+                            };
+                            db.TenderStock.Add(tenderStock);
+                        }
+
+                    };
+                    foreach (var tU in editedTender.TenderUserId)
+                    {
+                        if (TenderUserDB.Where(x => x.UserId == tU).FirstOrDefault() != null)
+                        {
+                            TenderUserDB.Where(x => x.UserId == tU).First().isDeleted = false;
+                        }
+                        else
+                        {
+                            TenderUser tenderUser = new TenderUser
+                            {
+                                TenderId = editedSingleId.Id,
+                                UserId = tU,
+                            };
+                            db.TenderUser.Add(tenderUser);
+                        }
+
+                    };
                     db.SaveChanges();
                 }
             }
@@ -700,6 +730,10 @@ namespace BusinessLogic
                 throw;
             }
         }
+
+
+
+
 
 
 
@@ -740,28 +774,36 @@ namespace BusinessLogic
             {
                 using (db = new ApplicationDbContext())
                 {
-                    var tenders = db.Tender.Include(x => x.User).ToList();
-                    var tenderUser = db.TenderUser.Where(u => u.UserId == userId).ToList();
-                    List<HomeTableDTO> tenderList = new List<HomeTableDTO>();
-                    if (userRole != true)
-                    { 
-                         foreach(var tU in tenderUser)
+                    var tenders = db.Tender
+                        .Include(x => x.User)
+                        .Select(tender => new HomeTableDTO 
                         {
-                            tenders.RemoveAll(t => t.Id != tU.TenderId);
-                        }
-                    }
-                    foreach (var tender in tenders)
-                    {
-                        var a = new HomeTableDTO
-                        {
+                            Id = tender.Id,
                             TenderNo = tender.TenderNo,
                             Dealer = tender.User.DealerName,
                             DealerName = tender.User.FirstName + " " + tender.User.LastName,
                             OpenDate = tender.OpenDate.ToString().Substring(0, 10),
                             CloseDate = tender.CloseDate.ToString().Substring(0, 10)
-
-                        };
-                        tenderList.Add(a);
+                        })
+                        .ToList();
+                    var tenderUser = db.TenderUser.Where(u => u.UserId == userId && u.isDeleted == false).ToList();
+                    List<HomeTableDTO> tenderList = new List<HomeTableDTO>();
+                    if (userRole != true)
+                    { 
+                         foreach(var tU in tenderUser)
+                        {
+                            foreach(var t in tenders)
+                            {
+                                if(t.Id == tU.TenderId)
+                                {
+                                    tenderList.Add(t);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return tenders;
                     }
                     return tenderList;
                 }
@@ -771,14 +813,14 @@ namespace BusinessLogic
                 throw;
             }
         }
-        public HomeTableDTO TenderInfo(string Id)
+        public HomeTableDTO TenderInfo(int Id)
         {
             try
             {
                 using (db = new ApplicationDbContext())
                 {
                     HomeTableDTO tenderList;
-                    var tender = db.Tender.Include(x => x.User).First(x => x.TenderNo == Id);
+                    var tender = db.Tender.Include(x => x.User).First(x => x.Id == Id);
                     tenderList = new HomeTableDTO
                     {
                         Id = tender.Id,
@@ -797,65 +839,175 @@ namespace BusinessLogic
                 throw;
             }
         }
-        public List<TenderCarsDTO> GetTenderCars(int Id)
+        public List<TenderCarsAndBidsDTO> GetTenderCars(int Id, string userId)
         {
             try
             {
-                using (db= new ApplicationDbContext())
+                using (db = new ApplicationDbContext())
                 {
-                    List<TenderCarsDTO> cars = new List<TenderCarsDTO>();
-                    var carsFromDb = db.TenderStock.Include(x => x.Stock).Include(x => x.Stock.Car).Include(x => x.Stock.Car.Manufacturer).Where(x => x.TenderId == Id).ToList();
-                    foreach(var car in carsFromDb)
+                    List<TenderCarsAndBidsDTO> cars = new List<TenderCarsAndBidsDTO>();
+                    if(userId != null)
                     {
-                        var carDB = new TenderCarsDTO {
-                            Id = car.Stock.Id,
-                            RegNo = car.Stock.RegNo,
-                            Year = car.Stock.Year,
-                            Make = car.Stock.Car.Manufacturer.ManufacturerName,
-                            CarLine = car.Stock.Car.ModelName,
-                            Model = car.Stock.Car.ModelNo,
-                            Mileage = car.Stock.Mileage,
-                            Comments = car.Stock.Comments
-                        };
-                        cars.Add(carDB);
+                        var carsFromDb = db.TenderStock
+                            .Include(x => x.Stock)
+                            .Include(x => x.Stock.Car)
+                            .Include(x => x.Stock.Car.Manufacturer)
+                            .Where(x => x.TenderId == Id && x.isDeleted == false)
+                            .ToList();
+                        var bidsFromDb = db.Bid
+                            .Include(x => x.Stock)
+                            .Include(x => x.User)
+                            .Include(x => x.User.User)
+                            .Where(x => x.User.User.Id == userId)
+                            .Where(x => x.Stock.TenderId == Id)
+                            .Where(x => x.isActive == true)
+                            .ToList();
+                        foreach (var car in carsFromDb)
+                        {
+                            var carDB = new TenderCarsAndBidsDTO
+                            {
+                                Id = car.StockId,
+                                TenderStockId = car.Id,
+                                RegNo = car.Stock.RegNo,
+                                Year = car.Stock.Year,
+                                Make = car.Stock.Car.Manufacturer.ManufacturerName,
+                                CarLine = car.Stock.Car.ModelName,
+                                Model = car.Stock.Car.ModelNo,
+                                Mileage = car.Stock.Mileage,
+                                Comments = car.Stock.Comments
+                            };
+                            foreach (var bid in bidsFromDb)
+                            {
+                                if (car.Id == bid.TenderStockId)
+                                {
+                                    carDB.BidPrice = bid.Price;
+                                    carDB.IdBid = bid.Id;
+                                }
+                            }
+                            cars.Add(carDB);
+                        }
+                        return cars;
+                    } else
+                    {
+                        var stocks = db.TenderStock
+                            .Include(x => x.Stock)
+                            .Include(x => x.Stock.Car)
+                            .Include(x => x.Stock.Car.Manufacturer)
+                            .Where(x => x.TenderId == Id)
+                            .Select(car => new TenderCarsAndBidsDTO
+                            {
+                                Id = car.StockId,
+                                TenderStockId = car.Id,
+                                RegNo = car.Stock.RegNo,
+                                Year = car.Stock.Year,
+                                Make = car.Stock.Car.Manufacturer.ManufacturerName,
+                                CarLine = car.Stock.Car.ModelName,
+                                Model = car.Stock.Car.ModelNo,
+                                Mileage = car.Stock.Mileage,
+                                Comments = car.Stock.Comments
+                            })
+                            .ToList();
+                        return stocks;
                     }
-                    return cars;
                 }
-               
-                
             }
             catch(Exception)
             {
                 throw;
             }
         }
-        public List<TenderBids> GetBids (int Id, string userId)
+
+        public void AddBid(int TenderStockId, double Price, string userId, int TenderId)
         {
             try
             {
                 using (db = new ApplicationDbContext())
                 {
-                    List<TenderBids> bids = new List<TenderBids>();
-                    var bidsFromDb = db.Bid.Include(x=> x.User.UserId).Where(x => x.TenderStockId == Id).Where(x => x.User.UserId == userId).ToList();
-                    foreach(var bid in bidsFromDb)
+                    var tendeUserId = db.TenderUser.Where(x => x.TenderId == TenderId).Where(x => x.UserId == userId).First();
+                    var userBid = db.Bid.Where(x => x.TenderUserId == tendeUserId.Id).Where(x => x.TenderStockId == TenderStockId);
+                    foreach (var bid in userBid)
                     {
-                        var bidDB = new TenderBids
-                        {
-                            Id = bid.Id,
-                            TenderUserId = bid.TenderUserId,
-                            TenderStockId = bid.TenderStockId,
-                            Price = bid.Price,
-                            IsWiningPrice = bid.IsWinningPrice
-                        };
-                        bids.Add(bidDB);
+                        bid.isActive = false;
                     }
-                    return bids;
-
+                    Bid newBid = new Bid
+                    {
+                        TenderUserId = tendeUserId.Id,
+                        TenderStockId = TenderStockId,
+                        Price = Price,
+                        IsWinningPrice = false,
+                        isActive = true
+                    };
+                    db.Bid.Add(newBid);
+                    db.SaveChanges();
                 }
             }
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        public void SaveWinnerBid(int Id, int tenderId, int stockId)
+        {
+            try
+            {
+                using (db = new ApplicationDbContext())
+                {
+                    var bids = db.Bid
+                        .Include(bid => bid.Stock)
+                        .Where(bid => bid.Stock.TenderId == tenderId && bid.Stock.StockId == stockId && bid.isActive == true)
+                        .ToList();
+
+                    foreach (var bid in bids)
+                    {
+                        if(bid.Id == Id)
+                        {
+                            bid.IsWinningPrice = true;
+
+                        } else
+                        {
+                            bid.IsWinningPrice = false;
+                        }
+                    }
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception error)
+            {
+                throw error;
+            }
+        }
+
+        public List<BidDTO> BidsByTenderIdAndStockId(int tenderId, int stockId)
+        {
+            try
+            {
+                using (db = new ApplicationDbContext())
+                {
+                    var bids = db.Bid
+                        .Include(x => x.Stock)
+                        .Include(x => x.Stock.Stock)
+                        .Include(x => x.User)
+                        .Include(x => x.User.User)
+                        .Where(x => x.Stock.TenderId == tenderId && x.Stock.StockId == stockId)
+                        .Where(x => x.isActive == true)
+                        .Select(bid => new BidDTO
+                        {
+                            Id = bid.Id,
+                            Price = bid.Price,
+                            IsWinningPrice = bid.IsWinningPrice,
+                            BidderName = bid.User.User.FirstName,
+                            StockId = bid.Stock.StockId
+                        })
+                        .ToList();
+                    return bids;
+                }
+
+            }
+            catch(Exception error)
+            {
+                throw error;
+
             }
         }
     }

@@ -68,6 +68,16 @@ function insertDataIntoTable() {
     $("#locationGrid").dxDataGrid({
         dataSource: mf,
         showBorders: true,
+        paging: {
+            pageSize: 10
+        },
+        pager: {
+            visible: true,
+            allowedPageSizes: [10, 15, 50, 100],
+            showPageSizeSelector: true,
+            showInfo: true,
+            showNavigationButtons: true
+        },
         editing: {
             refreshMode: "full",
             mode: "popup",
