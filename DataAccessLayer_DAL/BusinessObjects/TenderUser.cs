@@ -16,6 +16,7 @@ namespace DataAccessLayer_DAL
         public int TenderId { get; set; }
         [Display(Name ="User")]
         public string UserId { get; set; }
+        public bool isDeleted { get; set; }
 
         [ForeignKey("TenderId")]
         public virtual Tender Tender { get; set; }

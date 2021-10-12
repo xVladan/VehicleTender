@@ -35,7 +35,6 @@ function insertDataIntoTable() {
             });
         },
         update: function (key, values) {
-            debugger;
             let tenderArray = tender.items();
             let editedTender = tenderArray.find(item => item.Id === key)
             editedTender = {

@@ -600,8 +600,8 @@ namespace BusinessLogic
                             OpenDate = tender.OpenDate.ToString(),
                             CloseDate = tender.CloseDate.ToString(),
                             StatusId = tender.Status.Id,
-                            TenderStockId = db.TenderStock.Where(x => x.TenderId == tender.Id).Select(x => x.StockId).ToList(),
-                            TenderUserId = db.TenderUser.Where(x => x.TenderId == tender.Id).Select(x => x.UserId).ToList(),
+                            TenderStockId = db.TenderStock.Where(x => x.TenderId == tender.Id && x.isDeleted == false).Select(x => x.StockId).ToList(),
+                            TenderUserId = db.TenderUser.Where(x => x.TenderId == tender.Id && x.isDeleted == false).Select(x => x.UserId).ToList(),
                             //StatusId = dbTender.FirstOrDefault(role => role.Id == tender.Id)
                         };
                         tenders.Add(result);
@@ -666,8 +666,19 @@ namespace BusinessLogic
             {
                 using (db = new ApplicationDbContext())
                 {
-                    Tender t = new Tender();
-                    
+                    var TenderStockDB = db.TenderStock.Where(x => x.TenderId == editedTender.Id);
+                    var TenderUserDB = db.TenderUser.Where(x => x.TenderId == editedTender.Id);
+
+                    foreach (var stock in TenderStockDB)
+                    {
+                        stock.isDeleted = true;
+                    }
+
+                    foreach (var user in TenderUserDB)
+                    {
+                        user.isDeleted = true;
+                    }
+
                     var editedSingleId = db.Tender.FirstOrDefault(x => x.Id == editedTender.Id);
                     editedSingleId.Id = editedTender.Id;
                     editedSingleId.UserId = editedTender.UserId;
@@ -676,8 +687,41 @@ namespace BusinessLogic
                     editedSingleId.CloseDate = DateTime.Parse(editedTender.CloseDate);
                     editedSingleId.StatusId = editedTender.StatusId;
                     editedSingleId.TenderNo = editedTender.TenderNo;
-                
-                    var savedTender = db.Tender.Add(t);
+
+                    foreach (var tS in editedTender.TenderStockId)
+                    {
+                        if (TenderStockDB.Where(x => x.StockId == tS).FirstOrDefault() != null)
+                        {
+                            TenderStockDB.Where(x => x.StockId == tS).First().isDeleted = false;
+                        }
+                        else
+                        {
+                            TenderStock tenderStock = new TenderStock
+                            {
+                                TenderId = editedSingleId.Id,
+                                StockId = tS,
+                            };
+                            db.TenderStock.Add(tenderStock);
+                        }
+
+                    };
+                    foreach (var tU in editedTender.TenderUserId)
+                    {
+                        if (TenderUserDB.Where(x => x.UserId == tU).FirstOrDefault() != null)
+                        {
+                            TenderUserDB.Where(x => x.UserId == tU).First().isDeleted = false;
+                        }
+                        else
+                        {
+                            TenderUser tenderUser = new TenderUser
+                            {
+                                TenderId = editedSingleId.Id,
+                                UserId = tU,
+                            };
+                            db.TenderUser.Add(tenderUser);
+                        }
+
+                    };
                     db.SaveChanges();
                 }
             }
@@ -686,6 +730,11 @@ namespace BusinessLogic
                 throw;
             }
         }
+
+
+
+
+
 
 
 
@@ -737,7 +786,7 @@ namespace BusinessLogic
                             CloseDate = tender.CloseDate.ToString().Substring(0, 10)
                         })
                         .ToList();
-                    var tenderUser = db.TenderUser.Where(u => u.UserId == userId).ToList();
+                    var tenderUser = db.TenderUser.Where(u => u.UserId == userId && u.isDeleted == false).ToList();
                     List<HomeTableDTO> tenderList = new List<HomeTableDTO>();
                     if (userRole != true)
                     { 
