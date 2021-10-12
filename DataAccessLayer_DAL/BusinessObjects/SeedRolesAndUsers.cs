@@ -31,12 +31,18 @@ namespace DataAccessLayer_DAL
 
             string userEmail = "admin@admin.com";
             string userPassword = "Admin!123";
+            string firstName = "John";
+            string lastName = "Smith";
+            string dealerName = "GT Line";
             ApplicationUser user = userManager.FindByEmail(userEmail);
             if(user == null)
             {
                 user = new ApplicationUser()
                 {
                     UserName = userEmail,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    DealerName = dealerName,
                     Email = userEmail,
                     isActive = true
                 };
