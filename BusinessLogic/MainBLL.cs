@@ -852,7 +852,7 @@ namespace BusinessLogic
                             .Include(x => x.Stock)
                             .Include(x => x.Stock.Car)
                             .Include(x => x.Stock.Car.Manufacturer)
-                            .Where(x => x.TenderId == Id)
+                            .Where(x => x.TenderId == Id && x.isDeleted == false)
                             .ToList();
                         var bidsFromDb = db.Bid
                             .Include(x => x.Stock)
