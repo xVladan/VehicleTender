@@ -867,6 +867,7 @@ namespace BusinessLogic
                             var carDB = new TenderCarsAndBidsDTO
                             {
                                 Id = car.StockId,
+                                TenderStockId = car.Id,
                                 RegNo = car.Stock.RegNo,
                                 Year = car.Stock.Year,
                                 Make = car.Stock.Car.Manufacturer.ManufacturerName,
@@ -896,6 +897,7 @@ namespace BusinessLogic
                             .Select(car => new TenderCarsAndBidsDTO
                             {
                                 Id = car.StockId,
+                                TenderStockId = car.Id,
                                 RegNo = car.Stock.RegNo,
                                 Year = car.Stock.Year,
                                 Make = car.Stock.Car.Manufacturer.ManufacturerName,

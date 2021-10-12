@@ -197,7 +197,7 @@ async function LoadTenderCars(id) {
     let userPromis = $.Deferred();
     let usersDataSource = new DevExpress.data.DataSource({
         id: "dataGrid",
-        key: ["Id", "IdBid"],
+        key: ["TenderStockId", "IdBid"],
         load: () => {
             $.ajax({
                 type: "POST",
@@ -219,7 +219,7 @@ async function LoadTenderCars(id) {
             $.ajax({
                 url: "/Home/AddBid",
                 type: "POST",
-                data: JSON.stringify({ TenderStockId: key.Id, Price: values.BidPrice, TenderId: id }),
+                data: JSON.stringify({ TenderStockId: key.TenderStockId, Price: values.BidPrice, TenderId: id }),
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
             });
