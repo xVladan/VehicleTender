@@ -101,11 +101,11 @@ namespace VehicleTender.Controllers
         }
 
         [HttpPost]
-        public void SelectWinnerBid(int Id, int tenderId)
+        public void SelectWinnerBid(int Id, int tenderId, int stockId)
         {
             try
             {
-                mainBLL.SaveWinnerBid(Id, tenderId);
+                mainBLL.SaveWinnerBid(Id, tenderId, stockId);
             }
             catch (Exception)
             {

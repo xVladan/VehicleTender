@@ -896,7 +896,7 @@ namespace BusinessLogic
             }
         }
 
-        public void SaveWinnerBid(int Id, int tenderId)
+        public void SaveWinnerBid(int Id, int tenderId, int stockId)
         {
             try
             {
@@ -904,7 +904,7 @@ namespace BusinessLogic
                 {
                     var bids = db.Bid
                         .Include(bid => bid.Stock)
-                        .Where(bid => bid.Stock.TenderId == tenderId && bid.isActive == true)
+                        .Where(bid => bid.Stock.TenderId == tenderId && bid.Stock.StockId == stockId && bid.isActive == true)
                         .ToList();
 
                     foreach (var bid in bids)
