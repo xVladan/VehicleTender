@@ -63,6 +63,7 @@ async function LoadTenderData() {
 
 function loadBids(tenderId, stockId) {
     let bidsPromis = $.Deferred();
+    let dataGridInstance = $("#tenderStocks").dxDataGrid("instance");
     let tenderBidsDataSource = new DevExpress.data.DataSource({
         key: "Id",
         load: () => {
@@ -79,15 +80,6 @@ function loadBids(tenderId, stockId) {
                 }
             });
             return bidsPromis.promise();
-        },
-        update: function (key) {
-            $.ajax({
-                url: "/Home/SelectWinnerBid",
-                type: "POST",
-                data: JSON.stringify({ Id: key, tenderId: tenderId }),
-                contentType: 'application/json; charset=utf-8',
-            });
-            location.replace("/");
         }
     });
     return tenderBidsDataSource;
@@ -118,7 +110,7 @@ function loadCars(id) {
 }
 
 async function loadAdminTenderCarsGrid(id) {
-    $("#tenderStocks").dxDataGrid({
+    const grid = $("#tenderStocks").dxDataGrid({
         dataSource: loadCars(id),
         keyExpr: "Id",
         showBorders: true,
@@ -160,15 +152,12 @@ async function loadAdminTenderCarsGrid(id) {
                 $("<div>")
                     .dxDataGrid({
                         dataSource: loadBids(id, stockId),
+                        keyExpr: "Id",
                         columnAutoWidth: true,
                         showBorders: true,
-                        editing: {
-                            mode: "batch",
-                            allowUpdating: true,
-                            allowAdding: false,
-                            allowDeleting: false,
-                            selectTextOnEditStart: true,
-                            startEditAction: "click"
+                        selection: {
+                            mode: "single",
+                            allowSelectAll: false
                         },
                         columns: [
                             {
@@ -182,8 +171,22 @@ async function loadAdminTenderCarsGrid(id) {
                             {
                                 dataField: "IsWinningPrice",
                                 caption: "Winner",
+                                allowEditing: false
                             },
-                        ]
+                        ],
+                        onSelectionChanged: function (e) { // Handler of the "selectionChanged" event
+                            var currentSelectedRowKeys = e.currentSelectedRowKeys;
+                            var currentDeselectedRowKeys = e.currentDeselectedRowKeys;
+                            var allSelectedRowKeys = e.selectedRowKeys;
+                            const winner = e.selectedRowsData[0];
+                            $.ajax({
+                                url: "/Home/SelectWinnerBid",
+                                type: "POST",
+                                data: JSON.stringify({ Id: winner.Id, tenderId: id, stockId: winner.StockId }),
+                                contentType: 'application/json; charset=utf-8',
+                            });
+                            grid.refresh();
+                        }
                     }).appendTo(container);
             }
         }
