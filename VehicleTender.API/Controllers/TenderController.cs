@@ -61,6 +61,28 @@ namespace VehicleTender.API.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("api/tender")]
+        public IHttpActionResult EditTender(TenderMobileDTO editData)
+        {
+            try
+            {
+                int tenderId = editData.Id;
+                int statusId = editData.StatusId;
+                var editedTender = mobileLogic.EditTender(tenderId, statusId);
+                if(editedTender == null)
+                {
+                    return NotFound();
+                }
+                return Ok(editedTender);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
+        }
+
         [HttpGet]
         [Route("api/tenderstocks")]
         public IHttpActionResult GetTenderStocks()
@@ -93,6 +115,26 @@ namespace VehicleTender.API.Controllers
                     return NotFound();
                 }
                 return Ok(savedData);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
+        }
+
+        [HttpPut]
+        [Route("api/tenderstock")]
+        public IHttpActionResult EditTenderStock(TenderStockMobileDTO editData)
+        {
+            try
+            {
+                var editedData = mobileLogic.EditTenderStock(editData);
+                if(editedData == null)
+                {
+                    return NotFound();
+                }
+                return Ok(editedData);
             }
             catch (Exception error)
             {
@@ -218,6 +260,26 @@ namespace VehicleTender.API.Controllers
                     return NotFound();
                 }
                 return Ok(savedBid);
+            }
+            catch (Exception error)
+            {
+                ErrorHandler errorHandler = new ErrorHandler(error);
+                return errorHandler.HandleError();
+            }
+        }
+
+        [HttpPut]
+        [Route("api/bid")]
+        public IHttpActionResult SetWiningBid(BidMobileDTO bidData)
+        {
+            try
+            {
+                var changedBid = mobileLogic.SetWiningBid(bidData);
+                if (changedBid == null)
+                {
+                    return NotFound();
+                }
+                return Ok(changedBid);
             }
             catch (Exception error)
             {

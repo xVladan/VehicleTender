@@ -16,7 +16,7 @@ namespace VehicleTender.API.Helpers
         public IHttpActionResult HandleError()
         {
             HttpResponseMessage response;
-            if (errorCode == -2146233087)
+            if (errorCode == -2146233087 || errorCode == -2146233088)
             {
                 response = new HttpResponseMessage(HttpStatusCode.BadRequest) 
                 {

@@ -275,6 +275,34 @@ namespace BusinessLogic
             }
         }
 
+        public StockInfoMobileDTO EditStock(StockInfoMobileDTO stockData)
+        {
+            try
+            {
+                using (db = new ApplicationDbContext())
+                {
+                    var stockById = db.StockInfo.FirstOrDefault(stock => stock.Id == stockData.Id);
+                    stockById.IsSold = stockData.IsSold;
+                    db.SaveChanges();
+                    return new StockInfoMobileDTO {
+                        Id = stockById.Id,
+                        ModelLineId = stockById.ModelLineId,
+                        Mileage = stockById.Mileage,
+                        Price = stockById.Price,
+                        Comments = stockById.Comments,
+                        LocationId = stockById.LocationId,
+                        RegNo = stockById.RegNo,
+                        IsSold = stockById.IsSold,
+                        SaledDate = stockById.SaledDate
+                    };
+                }
+            }
+            catch (Exception error)
+            {
+                throw error;
+            }
+        }
+
         // Location methods 
 
         public Location SaveLocationInDB(Location location)
@@ -353,6 +381,33 @@ namespace BusinessLogic
             }
         }
 
+        public TenderMobileDTO EditTender(int tenderId, int statusId)
+        {
+            try
+            {
+                using(db = new ApplicationDbContext())
+                {
+                    var tenderById = db.Tender.FirstOrDefault(tender => tender.Id == tenderId);
+                    tenderById.StatusId = statusId;
+                    db.SaveChanges();
+                    return new TenderMobileDTO
+                    {
+                        Id = tenderById.Id,
+                        CreatedDate = tenderById.CreatedDate,
+                        UserId = tenderById.UserId,
+                        TenderNo = tenderById.TenderNo,
+                        OpenDate = tenderById.OpenDate,
+                        CloseDate = tenderById.CloseDate,
+                        StatusId = tenderById.StatusId
+                    };
+                }
+            }
+            catch (Exception error)
+            {
+                throw error;
+            }
+        }
+
         public List<TenderStatus> GetTenderStatuses()
         {
             try
@@ -420,6 +475,11 @@ namespace BusinessLogic
             {
                 using(db = new ApplicationDbContext())
                 {
+                    var dbTenderStocks = db.TenderStock.Where(tS => tS.StockId == data.StockId && tS.TenderId == data.TenderId).ToList();
+                    if(dbTenderStocks.Count != 0)
+                    {
+                        throw new Exception("Stock already exists!");
+                    }
                     TenderStock tenderStock = new TenderStock
                     {
                         StockId = data.StockId,
@@ -429,13 +489,47 @@ namespace BusinessLogic
                     };
                     var savedData = db.TenderStock.Add(tenderStock);
                     db.SaveChanges();
-                    data.Id = savedData.Id;
-                    return data;
+ 
+                    return new TenderStockMobileDTO 
+                    {
+                        Id = savedData.Id,
+                        StockId = savedData.StockId,
+                        TenderId = savedData.TenderId,
+                        isDeleted = savedData.isDeleted,
+                        SaleDate = savedData.SaleDate
+                    };
                 }
             }
             catch (Exception error)
             {
 
+                throw error;
+            }
+        }
+
+        public TenderStockMobileDTO EditTenderStock(TenderStockMobileDTO data)
+        {
+            try
+            {
+                using(db = new ApplicationDbContext())
+                {
+                    var tenderStockById = db.TenderStock.FirstOrDefault(tS => tS.Id == data.Id);
+                    tenderStockById.isDeleted = data.isDeleted;
+                    tenderStockById.SaleDate = data.SaleDate;
+                    db.SaveChanges();
+                    TenderStockMobileDTO savedData = new TenderStockMobileDTO 
+                    {
+                        Id = tenderStockById.Id,
+                        StockId = tenderStockById.StockId,
+                        TenderId = tenderStockById.TenderId,
+                        SaleDate = tenderStockById.SaleDate,
+                        isDeleted = tenderStockById.isDeleted
+                    };
+                    return savedData;
+                }
+            }
+            catch (Exception error)
+            {
                 throw error;
             }
         }
@@ -501,6 +595,7 @@ namespace BusinessLogic
                             TenderStockId = bid.TenderStockId,
                             TenderUserId = bid.TenderUserId,
                             IsWinningPrice = bid.IsWinningPrice,
+                            isActive = bid.isActive,
                             Price = bid.Price
                         })
                         .ToList();
@@ -524,12 +619,27 @@ namespace BusinessLogic
                         TenderStockId = bidData.TenderStockId,
                         TenderUserId = bidData.TenderUserId,
                         IsWinningPrice = bidData.IsWinningPrice,
+                        isActive = true,
                         Price = bidData.Price
                     };
+                    var bids = db.Bid.Where(b => b.TenderStockId == bid.TenderStockId && b.TenderUserId == bid.TenderUserId).ToList();
+                    if(bids.Count != 0)
+                    {
+                        foreach(var b in bids)
+                        {
+                            b.isActive = false;
+                        }
+                    }
                     var storedBid = db.Bid.Add(bid);
                     db.SaveChanges();
-                    bidData.Id = storedBid.Id;
-                    return bidData;
+                    return new BidMobileDTO {
+                        Id = storedBid.Id,
+                        TenderStockId = storedBid.TenderStockId,
+                        TenderUserId = storedBid.TenderUserId,
+                        Price = storedBid.Price,
+                        IsWinningPrice = storedBid.IsWinningPrice,
+                        isActive = storedBid.isActive
+                    };
                 }
             }
             catch (Exception error)
@@ -537,6 +647,30 @@ namespace BusinessLogic
                 throw error;
             }
         }
-
+        public BidMobileDTO SetWiningBid(BidMobileDTO bidData)
+        {
+            try
+            {
+                using(db = new ApplicationDbContext())
+                {
+                    var bid = db.Bid.FirstOrDefault(b => b.TenderStockId == bidData.TenderStockId && b.TenderUserId == bidData.TenderUserId && b.isActive == true);
+                    bid.IsWinningPrice = true;
+                    db.SaveChanges();
+                    return new BidMobileDTO
+                    {
+                        Id = bid.Id,
+                        TenderStockId = bid.TenderStockId,
+                        TenderUserId = bid.TenderUserId,
+                        Price = bid.Price,
+                        IsWinningPrice = bid.IsWinningPrice,
+                        isActive = bid.isActive
+                    };
+                }
+            }
+            catch (Exception error)
+            {
+                throw error;
+            }
+        }
     }
 }
