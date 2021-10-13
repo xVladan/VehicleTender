@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <setParameter name="IIS Web Application Name" value="vehicletender" />
+  <setParameter name="DefaultConnection-Web.config Connection String" value="Data Source=192.168.0.251;Initial Catalog=aspnet-VehicleTender;user id=sa;password=Klqiks!!2019;;Integrated Security=True" />
+</parameters>

@@ -28,12 +28,12 @@ namespace VehicleTender
 
             // Inculiding DevExpress in project
 
-            bundles.Add(new ScriptBundle("~/bundles/dx.all").Include("~/Content/DX/js/dx.all.js"));
-            bundles.Add(new ScriptBundle("~/bundles/knockout").Include("~/Content/DX/js/knockout-{version}.js"));
-            bundles.Add(new ScriptBundle("~/bundles/jszip.min").Include("~/Content/DX/js/jszip.min.js"));
-            bundles.Add(new ScriptBundle("~/bundles/globalize.min").Include("~/Content/DX/js/globalize.min.js"));
-            bundles.Add(new StyleBundle("~/bundles/dx.common").Include("~/Content/DX/css/dx.common.css"));
-            bundles.Add(new StyleBundle("~/bundles/dx.light").Include("~/Content/DX/css/dx.light.css"));
+            //bundles.Add(new ScriptBundle("~/bundles/dx.all").Include("~/Content/DX/js/dx.all.js"));
+            //bundles.Add(new ScriptBundle("~/bundles/knockout").Include("~/Content/DX/js/knockout-{version}.js"));
+            //bundles.Add(new ScriptBundle("~/bundles/jszip.min").Include("~/Content/DX/js/jszip.min.js"));
+            //bundles.Add(new ScriptBundle("~/bundles/globalize.min").Include("~/Content/DX/js/globalize.min.js"));
+            //bundles.Add(new StyleBundle("~/bundles/dx.common").Include("~/Content/DX/css/dx.common.css"));
+            //bundles.Add(new StyleBundle("~/bundles/dx.light").Include("~/Content/DX/css/dx.light.css"));
         }
     }
 }
