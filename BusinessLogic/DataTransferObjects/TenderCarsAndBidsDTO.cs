@@ -17,6 +17,7 @@ namespace BusinessLogic.DataTransferObjects
         public string CarLine { get; set; }
         public string Model { get; set; }
         public double Mileage { get; set; }
+        public double Price { get; set; }
         public string Comments { get; set; }
         public int? IdBid { get; set; }
         public double? BidPrice { get; set; }

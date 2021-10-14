@@ -231,7 +231,8 @@ namespace BusinessLogic
                             LocationId = stock.LocationId,
                             RegNo = stock.RegNo,
                             IsSold = stock.IsSold,
-                            SaledDate = stock.SaledDate
+                            SaledDate = stock.SaledDate,
+                            Year = stock.Year
                         })
                         .ToList();
 
@@ -260,7 +261,8 @@ namespace BusinessLogic
                         LocationId = stockData.LocationId,
                         RegNo = stockData.RegNo,
                         IsSold = stockData.IsSold,
-                        SaledDate = stockData.SaledDate
+                        SaledDate = stockData.SaledDate,
+                        Year = stockData.Year
                     };
                     var stock = db.StockInfo.Add(stockInfo);
                     db.SaveChanges();
@@ -293,7 +295,8 @@ namespace BusinessLogic
                         LocationId = stockById.LocationId,
                         RegNo = stockById.RegNo,
                         IsSold = stockById.IsSold,
-                        SaledDate = stockById.SaledDate
+                        SaledDate = stockById.SaledDate,
+                        Year = stockById.Year
                     };
                 }
             }
